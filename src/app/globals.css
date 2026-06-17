@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  --brand-brown-dark: #3D2410;
+  --brand-brown: #5A3418;
+  --brand-brown-light: #6B4E36;
+  --brand-gold: #D4A017;
+  --brand-gold-light: #FFF8E8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  --font-playfair: var(--font-playfair);
+  --font-great-vibes: var(--font-great-vibes);
+  
+  --color-brand-brown-dark: var(--brand-brown-dark);
+  --color-brand-brown: var(--brand-brown);
+  --color-brand-brown-light: var(--brand-brown-light);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-light: var(--brand-gold-light);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Footer credit styles */
+.site-footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+.site-footer__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.site-footer a {
+  color: var(--color-brand-brown);
+  text-decoration: none;
+  font-weight: 600;
+}
+.site-footer a:hover {
+  text-decoration: underline;
+}
