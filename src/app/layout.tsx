@@ -50,7 +50,7 @@ export default function RootLayout({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                UNIFIROLABS
+                Unifiro Labs
               </a>
             </p>
           </div>
