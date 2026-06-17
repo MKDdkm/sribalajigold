@@ -4,54 +4,60 @@
   --background: #ffffff;
   --foreground: #171717;
   
+  /* Brown & Gold palette - Original colors */
   --brand-brown-dark: #3D2410;
-  --brand-brown: #5A3418;
-  --brand-brown-light: #6B4E36;
+  --brand-brown: #6B4E36;
+  --brand-brown-light: #8B6F47;
   --brand-gold: #D4A017;
-  --brand-gold-light: #FFF8E8;
+  --brand-gold-light: #F4E8C1;
+  
+  /* Map green/orange to brown/gold for compatibility */
+  --brand-green-dark: #3D2410;
+  --brand-green: #6B4E36;
+  --brand-green-light: #8B6F47;
+  --brand-orange: #D4A017;
+  --brand-orange-light: #F4E8C1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  
-  --font-playfair: var(--font-playfair);
-  --font-great-vibes: var(--font-great-vibes);
-  
-  --color-brand-brown-dark: var(--brand-brown-dark);
-  --color-brand-brown: var(--brand-brown);
-  --color-brand-brown-light: var(--brand-brown-light);
-  --color-brand-gold: var(--brand-gold);
-  --color-brand-gold-light: var(--brand-gold-light);
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), system-ui, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Footer credit styles */
-.site-footer {
-  margin-top: 2rem;
-  padding: 1rem 0;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--foreground);
+/* Layout helpers to keep footer at the bottom without overlapping */
+.site-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.site-footer__inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
+.site-main {
+  flex: 1 0 auto;
+  display: block;
 }
-.site-footer a {
-  color: var(--color-brand-brown);
-  text-decoration: none;
-  font-weight: 600;
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
 }
-.site-footer a:hover {
-  text-decoration: underline;
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--brand-green), var(--brand-orange));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--brand-green-dark), var(--brand-orange));
 }

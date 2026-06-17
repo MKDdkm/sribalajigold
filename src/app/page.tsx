@@ -1,0 +1,1388 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+  Award,
+  Store,
+  Utensils,
+  Sprout,
+  ShieldCheck,
+  Heart,
+  Menu,
+  X,
+  ArrowRight,
+  CheckCircle2,
+  Send,
+  Clock,
+  Sparkles,
+  MapPin,
+  Phone,
+  Mail,
+  Wheat,
+  Factory
+} from "lucide-react";
+
+// Types and Data
+import { PRODUCTS, getProductSlug, type Product } from "./products-data";
+
+const QUALITY_IMAGES = [
+  "/quality assurance/triple dust aspiration.png",
+  "/quality assurance/sortex.png",
+  "/quality assurance/moisturiser.png"
+];
+
+const COMING_SOON_PRODUCTS = PRODUCTS.filter(p => !p.isAvailable);
+
+export default function Home() {
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [inquiryProduct, setInquiryProduct] = useState<Product | null>(null);
+  const [inquirySent, setInquirySent] = useState<boolean>(false);
+  const [formData, setFormData] = useState({ name: "", phone: "", quantity: "100 kg", notes: "" });
+
+  // Coming Soon Modal States
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState<boolean>(false);
+  const [comingSoonEmail, setComingSoonEmail] = useState<string>("");
+  const [comingSoonSuccess, setComingSoonSuccess] = useState<boolean>(false);
+
+  // Slideshow for quality assurance section
+  const [currentQualityIndex, setCurrentQualityIndex] = useState<number>(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentQualityIndex((prev) => (prev + 1) % QUALITY_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [currentQualityIndex]);
+
+  // Modal Carousel States
+  const [activeModalProductIndex, setActiveModalProductIndex] = useState<number>(0);
+
+  const nextModalProduct = () => {
+    setActiveModalProductIndex((prev) => (prev + 1) % COMING_SOON_PRODUCTS.length);
+  };
+
+  const prevModalProduct = () => {
+    setActiveModalProductIndex((prev) => (prev - 1 + COMING_SOON_PRODUCTS.length) % COMING_SOON_PRODUCTS.length);
+  };
+
+  useEffect(() => {
+    if (!isComingSoonOpen) return;
+    const interval = setInterval(() => {
+      setActiveModalProductIndex((prev) => (prev + 1) % COMING_SOON_PRODUCTS.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isComingSoonOpen]);
+
+  const categories = ["All", "Ravas & Sujis", "Healthy Flours", "Premium Rice", "Pohas & Millets"];
+
+  const filteredProducts = selectedCategory === "All"
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.category === selectedCategory);
+
+  const handleInquirySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setInquirySent(true);
+    setTimeout(() => {
+      setInquirySent(false);
+      setInquiryProduct(null);
+      setFormData({ name: "", phone: "", quantity: "100 kg", notes: "" });
+    }, 3000);
+  };
+
+  const handleComingSoonSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setComingSoonSuccess(true);
+    setTimeout(() => {
+      setComingSoonSuccess(false);
+      setComingSoonEmail("");
+      setIsComingSoonOpen(false);
+    }, 2500);
+  };
+
+  // Enhanced Framer Motion Variants for Premium Animations
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: [0.25, 0.46, 0.45, 0.94]
+      } 
+    }
+  };
+
+  const fadeInScale: Variants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      transition: { 
+        duration: 0.7, 
+        ease: [0.25, 0.46, 0.45, 0.94]
+      } 
+    }
+  };
+
+  const staggerContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const cardHoverEffect: Variants = {
+    hover: { 
+      y: -8, 
+      scale: 1.02, 
+      transition: { 
+        duration: 0.3, 
+        ease: "easeOut" 
+      } 
+    }
+  };
+
+  const slideInFromLeft: Variants = {
+    hidden: { opacity: 0, x: -60 },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: [0.25, 0.46, 0.45, 0.94]
+      } 
+    }
+  };
+
+  const slideInFromRight: Variants = {
+    hidden: { opacity: 0, x: 60 },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      transition: { 
+        duration: 0.8, 
+        ease: [0.25, 0.46, 0.45, 0.94]
+      } 
+    }
+  };
+
+  return (
+    <div className="bg-[#FAF6F0] min-h-screen relative text-brand-brown-dark font-sans selection:bg-brand-gold/20 selection:text-brand-brown-dark">
+      
+      {/* 1. Sticky Glassmorphic Navbar */}
+      <header className="sticky top-0 h-[80px] border-b border-[#F1E7D8]/80 bg-[#FAF6F0]/95 backdrop-blur-md z-50 transition-all duration-300">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-full flex items-center justify-between">
+          <a href="#" className="flex items-center gap-3 group">
+            <div className="relative w-[140px] h-[60px] mix-blend-multiply">
+              <Image
+                src="/logo.png"
+                alt="Sri Balaji Gold"
+                fill
+                className="object-contain object-left"
+                priority
+              />
+            </div>
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-10 font-bold text-sm text-[#3D2410]">
+            <a href="#hero" className="hover:text-[#D4A017] transition-colors duration-300">Home</a>
+            <a href="#products" className="hover:text-[#D4A017] transition-colors duration-300">Products</a>
+            <a href="#about" className="hover:text-[#D4A017] transition-colors duration-300">Our Story</a>
+            <a href="#quality" className="hover:text-[#D4A017] transition-colors duration-300">Quality</a>
+            <button
+              onClick={() => setIsComingSoonOpen(true)}
+              className="hover:text-[#D4A017] transition-colors duration-300 font-bold text-sm text-[#3D2410] cursor-pointer bg-transparent border-none p-0"
+            >
+              Coming Soon
+            </button>
+            <a href="#contact" className="hover:text-[#D4A017] transition-colors duration-300">Contact</a>
+          </nav>
+
+          {/* CTA Header Button */}
+          <div className="hidden md:block">
+            <a
+              href="#products"
+              className="bg-[#5A3418] hover:bg-[#3D2410] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Shop Now
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-brand-brown hover:text-brand-gold transition-colors"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden absolute top-[80px] left-0 right-0 bg-white/95 backdrop-blur-md border-b border-brand-gold/10 px-6 py-6 flex flex-col gap-4 shadow-lg z-50 rounded-b-2xl"
+            >
+              <a
+                href="#hero"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+              >
+                Home
+              </a>
+              <a
+                href="#products"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+              >
+                Products
+              </a>
+              <a
+                href="#about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+              >
+                Our Story
+              </a>
+              <a
+                href="#quality"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+              >
+                Quality
+              </a>
+              <button
+                onClick={() => { setIsComingSoonOpen(true); setIsMobileMenuOpen(false); }}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1 text-left cursor-pointer bg-transparent border-none p-0"
+              >
+                Coming Soon
+              </button>
+              <a
+                href="#contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+              >
+                Contact
+              </a>
+              <a
+                href="#products"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="bg-[#5A3418] text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
+              >
+                Shop Now
+              </a>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* 2. Hero Section */}
+      <section id="hero" className="w-full relative">
+        <div className="w-full h-[540px] md:h-[620px] overflow-hidden relative bg-[#FCF8F2]">
+          
+          {/* Background Image filling container exactly */}
+          <div className="absolute inset-0 w-full h-full z-0 select-none">
+            <Image
+              src="/hero-banner.png"
+              alt="Sri Balaji Gold Traditional Kitchen Scene"
+              fill
+              priority
+              className="object-cover object-[30%_25%]"
+            />
+          </div>
+
+          {/* Strong ivory gradient overlay on mobile for absolute text legibility, softer on desktop */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FCF8F2]/95 via-[#FCF8F2]/90 to-transparent md:from-[#FCF8F2]/65 md:via-[#FCF8F2]/35 md:to-transparent md:w-[50%] z-10 pointer-events-none" />
+
+          {/* Left Content Positioned Responsive */}
+          <div className="absolute top-[50px] sm:top-[80px] md:top-[120px] left-[24px] md:left-[90px] right-[24px] md:right-auto max-w-full md:max-w-[420px] z-20 flex flex-col items-start">
+            
+            {/* Heading text */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="font-playfair text-4xl sm:text-6xl md:text-[72px] font-[800] text-[#3D2410] leading-[0.95] tracking-tight"
+            >
+              The Taste <br />
+              Every Family
+            </motion.h1>
+            
+            <motion.span
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-great-vibes text-3xl sm:text-4xl md:text-[56px] font-normal bg-gradient-to-r from-[#D4A017] to-[#B8860B] bg-clip-text text-transparent block mt-1"
+            >
+              Trusts
+            </motion.span>
+
+            {/* Description text */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-[#6B4E36] text-[14px] md:text-[16px] mt-4 md:mt-6 max-w-[350px] leading-relaxed font-medium"
+            >
+              For over 40 years, Sri Balaji Gold has been bringing pure, stone-ground flours, ravas, and grains to kitchens across India. Crafted with love, processed for purity.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3 mt-6 md:mt-8 w-full sm:w-auto"
+            >
+              <motion.a
+                href="#products"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-[#5A3418] hover:bg-[#3D2410] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-md hover:shadow-[#5A3418]/10 transition-all duration-300 text-center w-full sm:w-auto"
+              >
+                Shop Now
+              </motion.a>
+              <motion.a
+                href="#about"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-white border border-[#D4A017] text-[#5A3418] rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm hover:bg-[#FAF6F0] transition-all duration-300 text-center w-full sm:w-auto"
+              >
+                Our Story
+              </motion.a>
+            </motion.div>
+
+          </div>
+
+          {/* Curved Wave Separator at the bottom of the hero banner */}
+          <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-20">
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="relative block w-full h-[50px] md:h-[90px] translate-y-[1px]">
+              <path d="M0,40 C450,115 950,10 1440,75 L1440,120 L0,120 Z" fill="#FAF6F0" />
+              <path d="M0,40 C450,115 950,10 1440,75" stroke="#D4A017" strokeWidth="3" fill="none" className="opacity-80" />
+            </svg>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 2.5. Stats Strip Section (Positioned below Hero, outside image overlay) */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="w-full bg-[#FAF6F0] py-12 md:py-16 border-b border-[#F1E7D8]/60 relative z-30"
+      >
+        <div className="max-w-[1240px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          
+          {/* Column 1: 40+ Years */}
+          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
+              <Award className="w-6 h-6 text-[#D4A017]" />
+            </div>
+            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">40+ Years of</div>
+            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Trusted Quality</div>
+          </div>
+
+          {/* Column 2: 1000+ Retailers */}
+          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
+              <Store className="w-6 h-6 text-[#D4A017]" />
+            </div>
+            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">1000+ Retailers</div>
+            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Across Karnataka</div>
+          </div>
+
+          {/* Column 3: Millions */}
+          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
+              <Utensils className="w-6 h-6 text-[#D4A017]" />
+            </div>
+            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">Millions of Breakfasts</div>
+            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Served with Love</div>
+          </div>
+
+        </div>
+      </motion.section>
+
+      {/* 3. Features Cards Section (Positioned below Stats Strip) */}
+      <section className="w-full bg-[#FAF6F0] py-8 md:py-12 relative z-30">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+          >
+            
+            {/* Directly Sourced */}
+            <motion.div 
+              variants={fadeInUp}
+              whileHover="hover"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
+                <Wheat className="w-6 h-6 text-[#D4A017]" />
+              </div>
+              <div>
+                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Directly Sourced From Farmers</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Premium grains sourced from trusted farming communities.</p>
+              </div>
+            </motion.div>
+            
+            {/* Sortex Processed */}
+            <motion.div 
+              variants={fadeInUp}
+              whileHover="hover"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
+                <Factory className="w-6 h-6 text-[#D4A017]" />
+              </div>
+              <div>
+                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Sortex Processed</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Advanced technology ensures purity and consistency.</p>
+              </div>
+            </motion.div>
+
+            {/* Trusted By Mothers */}
+            <motion.div 
+              variants={fadeInUp}
+              whileHover="hover"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
+                <Heart className="w-6 h-6 text-[#D4A017]" />
+              </div>
+              <div>
+                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Trusted By Mothers</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Serving generations with nutritious breakfast essentials.</p>
+              </div>
+            </motion.div>
+
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 4. Heritage Story Section */}
+      <motion.section 
+        id="about" 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-20 relative"
+      >
+        {/* Scattered grains decorative background details */}
+        <div className="absolute top-12 left-4 opacity-30 select-none pointer-events-none hidden md:block">
+          <svg width="60" height="80" viewBox="0 0 60 80" fill="none" className="text-[#D4A017]">
+            <path d="M10,20 Q20,15 30,30 T50,40" stroke="currentColor" strokeWidth="2" />
+            <circle cx="10" cy="20" r="3" fill="currentColor" />
+            <circle cx="25" cy="22" r="3" fill="currentColor" />
+            <circle cx="38" cy="35" r="3" fill="currentColor" />
+            <circle cx="48" cy="42" r="3" fill="currentColor" />
+          </svg>
+        </div>
+        <div className="absolute bottom-16 right-4 opacity-30 select-none pointer-events-none hidden md:block">
+          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" className="text-[#D4A017]">
+            <path d="M20,10 Q40,30 30,60 T60,90" stroke="currentColor" strokeWidth="2" />
+            <circle cx="20" cy="10" r="3" fill="currentColor" />
+            <circle cx="35" cy="32" r="3" fill="currentColor" />
+            <circle cx="28" cy="58" r="3" fill="currentColor" />
+            <circle cx="58" cy="88" r="3" fill="currentColor" />
+          </svg>
+        </div>
+
+        {/* Large container card matching target layout */}
+        <div className="bg-[#F5EFE6] border border-[#E3D7C5] rounded-3xl md:rounded-[32px] p-5 sm:p-8 md:p-14 shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10 items-stretch">
+            
+            {/* Left Column: Text content */}
+            <div className="lg:col-span-6 flex flex-col justify-between items-start">
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <h2 className="font-playfair text-3xl md:text-4xl font-[800] text-[#3D2410] leading-tight">
+                    The Taste of Tradition <br />
+                    Since 1980
+                  </h2>
+                  <div className="w-14 h-14 rounded-full overflow-hidden relative border border-[#D4A017]/30 bg-white p-1.5 flex-shrink-0 shadow-sm flex items-center justify-center">
+                    <Image
+                      src="/logo.png"
+                      alt="Lord Balaji Deity"
+                      width={56}
+                      height={56}
+                      className="object-contain scale-[1.6] object-[10%_center]"
+                    />
+                  </div>
+                </div>
+
+                <div className="text-[#6B4E36] text-sm md:text-base space-y-4 font-medium leading-relaxed">
+                  <p>
+                    Every morning begins with faith, family, and food. Inspired by the trust of Lord Balaji and the love of mothers, Sri Balaji Gold has been a part of countless breakfast tables for over four decades.
+                  </p>
+                  <p>
+                    From soft idlis and crispy dosas to wholesome upma, our products help families create nutritious meals that bring everyone together.
+                  </p>
+                  <p>
+                    Every pack is hygienically processed, carefully selected, and crafted to deliver purity, taste, and nourishment in every serving.
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative Rice Grains illustration at the bottom left */}
+              <div className="mt-8 flex items-center gap-2 text-brand-gold/60">
+                <Wheat className="w-5 h-5 text-[#D4A017]" />
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#5A3418]/60">Hygienically Packed & Stone Ground</span>
+              </div>
+            </div>
+
+            {/* Middle Column: Factory Image */}
+            <div className="md:col-span-1 lg:col-span-3">
+              <div className="relative w-full h-[260px] sm:h-[320px] md:h-full rounded-2xl overflow-hidden border-2 border-white shadow-md group">
+                <Image
+                  src="/about_factory.png"
+                  alt="Sri Balaji Gold Automated Factory Processing"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            {/* Right Column: Family Eating Image */}
+            <div className="md:col-span-1 lg:col-span-3">
+              <div className="relative w-full h-[260px] sm:h-[320px] md:h-full rounded-2xl overflow-hidden border-2 border-white shadow-md group">
+                <Image
+                  src="/about_family.png"
+                  alt="Family eating healthy breakfast together"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </motion.section>
+
+      {/* 5. Product Catalog Showcase Section */}
+      <section id="products" className="py-24 bg-white border-y border-brand-brown/5">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+              OUR CATALOGUE
+            </span>
+            <h2 className="font-playfair text-4xl md:text-5xl font-[800] text-[#3D2410] leading-tight mb-4">
+              Explore the Sri Balaji Gold Range
+            </h2>
+            <p className="text-[#6B4E36] text-base">
+              Pure grains, premium flours, and traditional breakfast staples meticulously sorted and packaged for your family.
+            </p>
+
+            {/* Filter Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-300 ${
+                    selectedCategory === cat
+                      ? "bg-[#5A3418] text-white shadow-md"
+                      : "bg-[#FAF6F0] text-[#6B4E36] hover:bg-[#FAF6F0] border border-brand-brown/5"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Product Grid */}
+          <motion.div
+            layout
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((product) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  key={product.id}
+                  whileHover={product.isAvailable ? "hover" : undefined}
+                  variants={cardHoverEffect}
+                  className={`bg-white rounded-3xl overflow-hidden border-2 flex flex-col h-full transition-all duration-300 group ${
+                    product.isAvailable 
+                      ? "cursor-pointer border-brand-green-light/20 hover:border-brand-green-light hover:shadow-2xl" 
+                      : "cursor-not-allowed border-gray-200"
+                  }`}
+                  onClick={(e) => {
+                    // Only allow navigation for available products
+                    if (!product.isAvailable) return;
+                    // Prevent navigation when clicking on inquiry buttons
+                    if ((e.target as HTMLElement).closest("button")) return;
+                    router.push(`/products/${getProductSlug(product.name)}`);
+                  }}
+                >
+                  {/* Image Container with Enhanced Design */}
+                  <div className="relative aspect-square w-full bg-gradient-to-br from-brand-orange-light/30 to-brand-green-light/10 overflow-hidden flex items-center justify-center p-4 md:p-6">
+                    <div className="relative w-full h-full">
+                      {product.isAvailable ? (
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-contain transition-all duration-500 group-hover:scale-110"
+                          style={product.id === "premium-idly-rava" ? { mixBlendMode: "multiply" } : {}}
+                        />
+                      ) : (
+                        // Placeholder for upcoming products - no actual packaging revealed
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-center space-y-4">
+                            <div className="w-32 h-32 md:w-40 md:h-40 mx-auto bg-gradient-to-br from-brand-green/10 to-brand-orange/10 rounded-3xl border-4 border-dashed border-brand-green/30 flex items-center justify-center backdrop-blur-sm">
+                              <div className="text-6xl md:text-7xl">📦</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {/* Launching Soon Overlay for unavailable products */}
+                    {!product.isAvailable && (
+                      <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[6px]">
+                        <div className="bg-gradient-to-r from-brand-orange to-brand-green text-white px-5 py-2.5 rounded-full text-sm md:text-base font-bold uppercase tracking-wide shadow-2xl border-2 border-white" style={{textShadow: '2px 2px 8px rgba(0,0,0,0.8)'}}>
+                          Launching Next
+                        </div>
+                      </div>
+                    )}
+                    {/* Category badge */}
+                    <span className="absolute top-3 md:top-4 left-3 md:left-4 bg-white/95 backdrop-blur-sm border border-brand-green/20 text-[#3D2410] text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
+                      {product.category}
+                    </span>
+                    {/* Availability badge - Only show for available products */}
+                    {product.isAvailable && (
+                      <span className="absolute top-3 md:top-4 right-3 md:right-4 bg-emerald-500 text-white text-[8px] md:text-[9px] font-bold uppercase tracking-wide px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
+                        ✓ Available
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Description Box with Enhanced Styling */}
+                  <div className="p-4 md:p-6 flex flex-col flex-grow bg-gradient-to-b from-white to-brand-orange-light/10">
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#3D2410] mb-2 group-hover:text-[#6B4E36] transition-colors line-clamp-1">
+                      {product.name}
+                    </h3>
+                    <p className="text-[#3D2410]/70 text-xs md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2 md:line-clamp-3">
+                      {product.description}
+                    </p>
+
+                    {/* Features checklist - hidden on mobile, visible on tablet/desktop */}
+                    <div className="hidden sm:flex flex-col gap-2 mb-4">
+                      {product.features.slice(0, 2).map((feat, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-[#D4A017] flex-shrink-0" />
+                          <span className="text-xs font-medium text-[#3D2410]/80">{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Footer Info */}
+                    <div className="flex items-center justify-between border-t border-brand-green/10 pt-4 mt-auto">
+                      {product.isAvailable ? (
+                        <div className="w-full">
+                          <span className="text-[9px] md:text-[11px] text-[#6B4E36] uppercase font-semibold block">Available Sizes</span>
+                          <span className="text-xs md:text-sm font-bold text-[#3D2410] block mt-1">{product.packSizes.join(" • ")}</span>
+                        </div>
+                      ) : (
+                        <div className="w-full">
+                          <span className="text-[9px] md:text-[11px] text-[#D4A017] uppercase font-bold tracking-wider block truncate">Launching Soon</span>
+                          <span className="text-xs md:text-sm font-bold text-[#3D2410]/70 block truncate">{product.packSizes.slice(0, 2).join(" / ")}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* 6. Quality Process Section */}
+      <motion.section 
+        id="quality" 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-24"
+      >
+        <div className="bg-[#3D2410] text-[#FAF6F0] rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
+          {/* Subtle golden design bg elements */}
+          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#D4A017] opacity-[0.07] blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-[#FFF8E8] opacity-[0.05] blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col lg:flex-row gap-10 items-center justify-between relative z-10">
+            {/* Left Content */}
+            <div className="w-full lg:w-[58%] flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+                  OUR GOLD STANDARD
+                </span>
+                <h2 className="font-playfair text-4xl md:text-5xl font-[800] text-white leading-tight mb-6">
+                  Quality Assurance In Every Grain
+                </h2>
+                <p className="text-white/80 text-base md:text-lg mb-8 leading-relaxed">
+                  Every single packet of Sri Balaji Gold undergoes rigorous testing. From seed selection and farm checks to multi-barrier sorting and hygienic packaging, our state-of-the-art facility guarantees optimal kitchen performance.
+                </p>
+              </div>
+
+              {/* Desktop View Buttons (hidden on mobile/tablet) */}
+              <motion.div 
+                variants={staggerContainer}
+                className="hidden lg:grid grid-cols-3 gap-4 lg:gap-6"
+              >
+                <button 
+                  onClick={() => setCurrentQualityIndex(0)}
+                  className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
+                    currentQualityIndex === 0 
+                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      : "border-transparent bg-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">01</div>
+                  <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
+                  <p className="text-white/70 text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                </button>
+                
+                <button 
+                  onClick={() => setCurrentQualityIndex(1)}
+                  className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
+                    currentQualityIndex === 1 
+                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      : "border-transparent bg-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">02</div>
+                  <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
+                  <p className="text-white/70 text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                </button>
+
+                <button 
+                  onClick={() => setCurrentQualityIndex(2)}
+                  className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
+                    currentQualityIndex === 2 
+                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      : "border-transparent bg-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">03</div>
+                  <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
+                  <p className="text-white/70 text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                </button>
+              </motion.div>
+
+              {/* Mobile / Tablet cards showing image and content (hidden on desktop) */}
+              <motion.div 
+                variants={staggerContainer}
+                className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:hidden mt-8"
+              >
+                {/* Card 01 */}
+                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                    <Image
+                      src="/quality assurance/triple dust aspiration.png"
+                      alt="Triple Dust Aspiration"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">01</div>
+                    <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
+                    <p className="text-white/70 text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                  </div>
+                </motion.div>
+
+                {/* Card 02 */}
+                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                    <Image
+                      src="/quality assurance/sortex.png"
+                      alt="Color Sortex Sort"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">02</div>
+                    <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
+                    <p className="text-white/70 text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                  </div>
+                </motion.div>
+
+                {/* Card 03 */}
+                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                    <Image
+                      src="/quality assurance/moisturiser.png"
+                      alt="Moisture Control"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">03</div>
+                    <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
+                    <p className="text-white/70 text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Right Column: Slideshow (Desktop only) */}
+            <div className="hidden lg:block w-[38%] relative aspect-square max-w-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentQualityIndex}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <Image
+                    src={QUALITY_IMAGES[currentQualityIndex]}
+                    alt={
+                      currentQualityIndex === 0 
+                        ? "Triple Dust Aspiration" 
+                        : currentQualityIndex === 1 
+                          ? "Color Sortex Sort" 
+                          : "Moisture Control"
+                    }
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  {/* Overlay shadow for rich look */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Slide indicators / Progress Dots */}
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+                {QUALITY_IMAGES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentQualityIndex(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      currentQualityIndex === idx ? "w-8 bg-[#D4A017]" : "w-2 bg-white/40 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* 7. Contact / Inquiry Section */}
+      <motion.section 
+        id="contact" 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="py-12 md:py-24 bg-[#FAF6F0] border-t border-brand-brown/5"
+      >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+          
+          {/* Left Column: Direct info */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
+            <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+              PARTNERSHIP & INQUIRIES
+            </span>
+            <h2 className="font-playfair text-4xl font-[800] text-[#3D2410] leading-tight mb-6">
+              Become a Retailer or Get Bulk Supplies
+            </h2>
+            <p className="text-[#6B4E36] mb-8 leading-relaxed">
+              We supply retail giants, supermarkets, and local grocery stores with premium flour and grains. Send us a message to request custom bulk price catalogues or samples.
+            </p>
+
+            <div className="flex flex-col gap-6">
+              <div className="flex items-start gap-4">
+                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-brand-gold/10">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-brand-brown-dark text-sm">Main Processing Unit</h4>
+                  <p className="text-[#6B4E36] text-xs mt-1">Sri Venkatalaxmi Agro Foods, Marlanhalli, Karatagi, Koppal District, Karnataka, India</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-[#D4A017]/10">
+                  <Phone className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-brand-brown-dark text-sm">Customer Helpline</h4>
+                  <p className="text-[#6B4E36] text-xs mt-1">+91 96205 27147</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-[#D4A017]/10">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-brand-brown-dark text-sm">Email Support</h4>
+                  <p className="text-[#6B4E36] text-xs mt-1">srivenkatalaxmiagrofoods@gmail.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Inquiry Form Card */}
+          <div className="lg:col-span-7">
+            <div className="bg-white border border-[#D4A017]/15 rounded-3xl p-5 sm:p-8 md:p-10 shadow-xl">
+              <h3 className="font-playfair text-2xl font-[800] text-[#3D2410] mb-2">Send an Inquiry</h3>
+              <p className="text-[#6B4E36] text-xs mb-6">Our sales representative will connect with you within 24 business hours.</p>
+
+              <form onSubmit={(e) => { e.preventDefault(); alert("Thank you for your interest! Our team will get back to you shortly."); }} className="flex flex-col gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter name"
+                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="Enter mobile number"
+                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Interested Product</label>
+                    <select
+                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold appearance-none"
+                    >
+                      <option>All Products Catalogue</option>
+                      {PRODUCTS.map(p => (
+                        <option key={p.id}>{p.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Approx. Monthly Requirement</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 500 kg"
+                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Message / Delivery Address Details</label>
+                  <textarea
+                    rows={4}
+                    placeholder="Enter details..."
+                    className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-[#5A3418] hover:bg-[#3D2410] text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                >
+                  <Send className="w-4 h-4" />
+                  Submit Inquiry
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </motion.section>
+
+      {/* 8. Footer */}
+      <footer className="w-full bg-gradient-to-r from-[#2F180B] via-[#3D2410] to-[#4A2B12] text-[#FAF6F0]/70 border-t border-white/5">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* Main Footer Row */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
+            {/* Left: Logo & Brand Name */}
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white p-0.5">
+                <Image src="/logo.png" alt="Sri Balaji Gold Logo" fill className="object-contain" />
+              </div>
+              <span className="font-playfair font-black text-base tracking-[0.28em] text-white whitespace-nowrap">SRI BALAJI GOLD</span>
+            </div>
+
+            {/* Center: Copyright Text */}
+            <div className="flex-1 text-center px-4">
+              <p className="m-0 text-xs sm:text-sm leading-relaxed text-[#FAF6F0]/75">
+                © {new Date().getFullYear()} Sri Venkatalaxmi Agro Foods. All Rights Reserved.
+              </p>
+            </div>
+
+            {/* Right: Privacy & Terms Links */}
+            <div className="flex items-center gap-6 shrink-0">
+              <a 
+                href="#" 
+                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="#" 
+                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+              >
+                Terms of Service
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom Row: Designer Credit */}
+          <div className="border-t border-white/5 pt-4">
+            <p className="text-center text-[10px] sm:text-xs text-[#FAF6F0]/50 leading-relaxed">
+              Designed &amp; Developed by{' '}
+              <a
+                href="https://unifirolabs.com"
+                className="text-[#FAF6F0]/60 no-underline transition-all duration-300 hover:text-[#FAF6F0]/90"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                UnifiroLabs
+              </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* 9. Product Inquiry Modal */}
+      <AnimatePresence>
+        {inquiryProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white border border-[#D4A017]/20 rounded-[32px] max-w-md w-full p-8 shadow-2xl relative"
+            >
+              <button
+                onClick={() => setInquiryProduct(null)}
+                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full"
+                aria-label="Close Modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {inquirySent ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="font-playfair text-xl font-black text-[#3D2410] mb-2">
+                    {inquiryProduct.isAvailable ? "Request Submitted!" : "Registration Complete!"}
+                  </h3>
+                  <p className="text-brand-brown-light text-xs max-w-xs">
+                    {inquiryProduct.isAvailable ? (
+                      <>We have received your interest in <strong>{inquiryProduct.name}</strong>. Our representative will contact you shortly!</>
+                    ) : (
+                      <>We will notify you immediately at this number as soon as <strong>{inquiryProduct.name}</strong> launches in your region!</>
+                    )}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#FAF6F0] border border-[#D4A017]/15 p-1 flex-shrink-0">
+                      <Image
+                        src={inquiryProduct.image}
+                        alt={inquiryProduct.name}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block mb-0.5">
+                        {inquiryProduct.isAvailable ? "Quick Price Quote" : "Register Launch Alert"}
+                      </span>
+                      <h3 className="font-playfair text-lg font-extrabold text-[#3D2410] leading-tight">{inquiryProduct.name}</h3>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4">
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Your Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="e.g. Ramesh Kumar"
+                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                      />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Phone Number</label>
+                      <input
+                        type="tel"
+                        required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="e.g. +91 98765 43210"
+                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col">
+                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">
+                          {inquiryProduct.isAvailable ? "Quantity Needed" : "Interested Size"}
+                        </label>
+                        <select
+                          value={formData.quantity}
+                          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                        >
+                          {inquiryProduct.packSizes.map((size, idx) => (
+                            <option key={idx}>{size}</option>
+                          ))}
+                          {!inquiryProduct.isAvailable && <option>All Sizes / Retail packs</option>}
+                          {inquiryProduct.isAvailable && (
+                            <>
+                              <option>50 kg (Trial)</option>
+                              <option>100 kg</option>
+                              <option>500 kg+</option>
+                            </>
+                          )}
+                        </select>
+                      </div>
+                      <div className="flex flex-col">
+                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Availability</label>
+                        {inquiryProduct.isAvailable ? (
+                          <div className="border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                            <Sparkles className="w-3 h-3 animate-pulse" /> In Stock
+                          </div>
+                        ) : (
+                          <div className="border border-[#D4A017]/20 bg-[#FFF8E8] text-[#D4A017] rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                            <Clock className="w-3 h-3" /> Coming Soon
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">
+                        {inquiryProduct.isAvailable ? "Delivery Details / Questions" : "Your City / Custom Requirements"}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={formData.notes}
+                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        placeholder="Enter details..."
+                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="bg-brand-brown hover:bg-brand-brown-dark text-white rounded-lg py-3 font-extrabold text-xs shadow-md mt-2 flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      {inquiryProduct.isAvailable ? "Request Instant Quote" : "Register For Launch Notification"}
+                    </button>
+                  </form>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 10. Recipes / Coming Soon Modal */}
+      <AnimatePresence>
+        {isComingSoonOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white border border-[#D4A017]/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
+            >
+              <button
+                onClick={() => setIsComingSoonOpen(false)}
+                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full z-10"
+                aria-label="Close Modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {comingSoonSuccess ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                    <CheckCircle2 className="w-10 h-10" />
+                  </div>
+                  <h3 className="font-playfair text-2xl font-black text-[#3D2410] mb-2">Registered Successfully!</h3>
+                  <p className="text-[#6B4E36] text-sm max-w-xs leading-relaxed">
+                    Thank you! We will notify you immediately as soon as our premium products are launched in your region!
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                  {/* Left Column: Product Showcase Carousel */}
+                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#FAF6F0] border border-[#F1E7D8] flex flex-col justify-between p-4 group">
+                    {/* Active product slide */}
+                    <div className="relative flex-grow w-full h-[70%]">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeModalProductIndex}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.3 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                        >
+                          <div className="relative w-full h-full">
+                            {COMING_SOON_PRODUCTS[activeModalProductIndex] && (
+                              <Image
+                                src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
+                                alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
+                                fill
+                                className="object-contain"
+                              />
+                            )}
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Product Meta details */}
+                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-[#D4A017]/10 text-center relative z-10">
+                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block">
+                        {COMING_SOON_PRODUCTS[activeModalProductIndex]?.category || ""}
+                      </span>
+                      <h4 className="font-playfair font-bold text-brand-brown-dark text-sm mt-0.5">
+                        {COMING_SOON_PRODUCTS[activeModalProductIndex]?.name || ""}
+                      </h4>
+                      <span className="inline-block mt-1 px-2 py-0.5 text-[8px] font-black tracking-wide uppercase bg-[#D4A017]/15 text-[#D4A017] rounded-md border border-[#D4A017]/25">
+                        Launching Soon
+                      </span>
+                    </div>
+
+                    {/* Carousel Controls */}
+                    <button
+                      onClick={prevModalProduct}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5 rotate-180" />
+                    </button>
+                    <button
+                      onClick={nextModalProduct}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+
+                    {/* Indicator dots */}
+                    <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+                      {COMING_SOON_PRODUCTS.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveModalProductIndex(idx)}
+                          className={`h-1 rounded-full transition-all duration-300 ${
+                            activeModalProductIndex === idx ? "w-4 bg-[#D4A017]" : "w-1 bg-[#D4A017]/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Form & Info */}
+                  <div className="flex flex-col text-left">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 rounded-full bg-[#FFF8E8] border border-[#D4A017]/20 flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-[#D4A017]" />
+                      </div>
+                      <span className="text-[10px] font-black uppercase text-[#D4A017] tracking-wider">New Product Range</span>
+                    </div>
+                    <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-[#3D2410] leading-tight mb-3">
+                      Coming Soon to Your Kitchen
+                    </h3>
+                    <p className="text-[#6B4E36] text-xs leading-relaxed mb-6">
+                      We are expanding our range with premium stone-ground flours, double-roasted ravas, and clean, nutritious millets. Register below to receive launch alerts and exclusive early-bird samples!
+                    </p>
+
+                    <form onSubmit={handleComingSoonSubmit} className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Email Address</label>
+                        <input
+                          type="email"
+                          required
+                          value={comingSoonEmail}
+                          onChange={(e) => setComingSoonEmail(e.target.value)}
+                          placeholder="yourname@gmail.com"
+                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold w-full"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="bg-brand-brown hover:bg-brand-brown-dark text-white rounded-lg py-3 font-extrabold text-xs shadow-md mt-2 flex items-center justify-center gap-2 w-full transition-all duration-300"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        Get Launch Invitation
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+    </div>
+  );
+}
