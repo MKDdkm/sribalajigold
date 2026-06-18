@@ -301,7 +301,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
       {/* SECTION 2: Recipe Gallery */}
       {recipes.length > 0 && (
-        <section className="bg-gradient-to-br from-[#F8F5F0] via-[#FFF9F0] to-[#F5EFE7] py-24 border-t border-brand-gold/15 relative overflow-hidden">
+        <section className="bg-gradient-to-br from-[#F0F5F2] via-[#F8FBF9] to-[#EFF4F1] py-24 border-t border-brand-gold/15 relative overflow-hidden">
           {/* Subtle background glow */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(230,126,34,0.08),transparent_50%)] pointer-events-none" />
           
@@ -339,12 +339,11 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-brand-gold" />
               </div>
               
-              <h2 className="text-6xl sm:text-7xl tracking-wider relative inline-block mb-3" style={{fontFamily: "'Great Vibes', cursive"}}>
-                <span className="bg-gradient-to-r from-brand-gold via-brand-orange to-brand-gold bg-clip-text text-transparent">Recipe Gallery</span>
+              <h2 className="text-6xl sm:text-7xl text-brand-brown-dark tracking-wider relative inline-block mb-3" style={{fontFamily: "'Great Vibes', cursive"}}>
+                Recipe Gallery
               </h2>
-              <p className="text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
-                <span className="text-brand-brown-dark">Delicious dishes made using</span>{' '}
-                <span className="bg-gradient-to-r from-brand-gold to-brand-orange bg-clip-text text-transparent">Sri Balaji {product.name}</span>
+              <p className="text-[#DAA520] text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
+                Delicious dishes made using Sri Balaji {product.name}
               </p>
               <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent mt-6 rounded-full" />
             </div>

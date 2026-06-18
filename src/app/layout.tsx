@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Montserrat, Playfair_Display, Great_Vibes } from "next/font/google";
+import { Poppins, Playfair_Display, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} ${playfair.variable} ${greatVibes.variable} antialiased`}
+        className={`${poppins.variable} ${playfair.variable} ${greatVibes.variable} antialiased`}
       >
         <div className="site-root min-h-screen flex flex-col">
           <main className="site-main flex-1">{children}</main>
