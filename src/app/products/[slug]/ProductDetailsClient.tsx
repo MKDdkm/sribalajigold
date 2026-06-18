@@ -11,7 +11,8 @@ import {
   ArrowLeft,
   Clock,
   Sparkles,
-  X
+  X,
+  Menu
 } from "lucide-react";
 import {
   PRODUCTS,
@@ -130,10 +131,10 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="bg-[#FAF6F0] min-h-screen relative text-brand-brown-dark font-sans selection:bg-brand-gold/20 selection:text-brand-brown-dark">
+    <div className="bg-background min-h-screen relative text-brand-brown-dark font-sans selection:bg-brand-gold/20 selection:text-brand-brown-dark">
 
       {/* 1. Sticky Glassmorphic Navbar */}
-      <header className="sticky top-0 h-[80px] border-b border-[#F1E7D8]/80 bg-[#FAF6F0]/95 backdrop-blur-md z-50 transition-all duration-300">
+      <header className="sticky top-0 h-[80px] border-b border-[#F1E7D8] bg-[#FAF6F0] z-50 transition-all duration-300">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-full flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-[140px] h-[60px] mix-blend-multiply">
@@ -148,25 +149,29 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-10 font-bold text-sm text-[#3D2410]">
-            <Link href="/" className="hover:text-[#D4A017] transition-colors duration-300">Home</Link>
-            <Link href="/#products" className="hover:text-[#D4A017] transition-colors duration-300">Products</Link>
-            <Link href="/#about" className="hover:text-[#D4A017] transition-colors duration-300">Our Story</Link>
-            <Link href="/#quality" className="hover:text-[#D4A017] transition-colors duration-300">Quality</Link>
+          <nav className="hidden md:flex items-center gap-10 font-bold text-sm text-brand-brown-dark">
+            <Link href="/" className="hover:text-brand-gold transition-colors duration-300">Home</Link>
+            <Link href="/#products" className="hover:text-brand-gold transition-colors duration-300">Products</Link>
+            <Link href="/#about" className="hover:text-brand-gold transition-colors duration-300">Our Story</Link>
+            <Link href="/#quality" className="hover:text-brand-gold transition-colors duration-300">Quality</Link>
             <button
               onClick={() => setIsComingSoonOpen(true)}
-              className="hover:text-[#D4A017] transition-colors duration-300 font-bold text-sm text-[#3D2410] cursor-pointer bg-transparent border-none p-0"
+              className="hover:text-brand-gold transition-colors duration-300 font-bold text-sm text-brand-brown-dark cursor-pointer bg-transparent border-none p-0"
             >
               Coming Soon
             </button>
-            <Link href="/#contact" className="hover:text-[#D4A017] transition-colors duration-300">Contact</Link>
+            <Link href="/#contact" className="hover:text-brand-gold transition-colors duration-300">Contact</Link>
           </nav>
 
           {/* CTA Header Button */}
           <div className="hidden md:block">
             <Link
               href="/#products"
-              className="bg-[#5A3418] hover:bg-[#3D2410] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-md hover:shadow-lg transition-all duration-300"
+              className="bg-[#6B4423] hover:bg-[#4A2C20] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{
+                backgroundColor: '#6B4423',
+                color: '#ffffff'
+              }}
             >
               Shop Now
             </Link>
@@ -178,7 +183,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
             className="md:hidden p-2 text-brand-brown hover:text-brand-gold transition-colors"
             aria-label="Toggle Menu"
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
@@ -190,7 +195,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden absolute top-[80px] left-0 right-0 bg-white/95 backdrop-blur-md border-b border-brand-gold/10 px-6 py-6 flex flex-col gap-4 shadow-lg z-50 rounded-b-2xl"
+              className="md:hidden absolute top-[80px] left-0 right-0 bg-white border-b border-brand-gold/10 px-6 py-6 flex flex-col gap-4 shadow-lg z-50 rounded-b-2xl"
             >
               <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="font-semibold text-brand-brown hover:text-brand-gold py-1">Home</Link>
               <Link href="/#products" onClick={() => setIsMobileMenuOpen(false)} className="font-semibold text-brand-brown hover:text-brand-gold py-1">Products</Link>
@@ -215,7 +220,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
         <div>
           <button
             onClick={() => router.push("/#products")}
-            className="group flex items-center gap-2 text-xs font-black uppercase text-[#6B4E36] hover:text-[#D4A017] transition-colors duration-300"
+            className="group flex items-center gap-2 text-xs font-black uppercase text-brand-brown hover:text-brand-gold transition-colors duration-300"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             Back to Products
@@ -227,8 +232,8 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
           {/* Left Side: Product Image (Sticky, 500px width) */}
           <div className="w-full lg:w-[500px] flex-shrink-0 lg:sticky lg:top-[120px] z-10">
-            <div className="relative aspect-square w-full rounded-[32px] overflow-hidden border border-[#D4A017]/15 bg-white shadow-2xl flex items-center justify-center p-8">
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#FFF8E8]/20 to-transparent pointer-events-none" />
+            <div className="relative aspect-square w-full rounded-[32px] overflow-hidden border border-brand-gold/15 bg-white shadow-2xl flex items-center justify-center p-8">
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold-light/20 to-transparent pointer-events-none" />
               <div className="relative w-full h-full">
                 <Image
                   src={product.image}
@@ -244,10 +249,10 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
           {/* Right Side: Product Details */}
           <div className="flex-grow flex flex-col text-left">
-            <span className="text-xs font-black uppercase tracking-widest text-[#D4A017] mb-2 block">
+            <span className="text-xs font-black uppercase tracking-widest text-brand-gold mb-2 block">
               {product.category}
             </span>
-            <h1 className="font-playfair text-4xl sm:text-5xl font-[900] text-[#3D2410] leading-tight mb-4">
+            <h1 className="text-4xl sm:text-5xl font-black text-brand-brown-dark leading-tight mb-4" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
               {product.name}
             </h1>
 
@@ -257,22 +262,22 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Available / In Stock
               </div>
             ) : (
-              <div className="inline-flex items-center gap-1.5 border border-[#D4A017]/20 bg-[#FFF8E8] text-[#D4A017] rounded-full px-4 py-1.5 text-xs font-extrabold w-max mb-8">
+              <div className="inline-flex items-center gap-1.5 border border-brand-gold/20 bg-brand-gold-light text-brand-gold rounded-full px-4 py-1.5 text-xs font-extrabold w-max mb-8">
                 <Clock className="w-3.5 h-3.5" /> Launching Soon / Pre-register
               </div>
             )}
 
-            <p className="text-[#6B4E36] text-base leading-relaxed mb-8 border-b border-[#F1E7D8]/80 pb-8">
+            <p className="text-brand-brown text-base leading-relaxed mb-8 border-b border-brand-green/10 pb-8">
               {product.description}
             </p>
 
             {/* Features list */}
             <div className="mb-8">
-              <h4 className="text-[10px] font-black uppercase text-[#6B4E36] tracking-widest mb-4">Product Highlights</h4>
+              <h4 className="text-[10px] font-black uppercase text-brand-brown tracking-widest mb-4">Product Highlights</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {product.features.map((feature: string, idx: number) => (
                   <div key={idx} className="flex items-center gap-2.5 text-xs font-bold text-brand-brown-dark">
-                    <CheckCircle2 className="w-4.5 h-4.5 text-[#D4A017] flex-shrink-0" />
+                    <CheckCircle2 className="w-4.5 h-4.5 text-brand-gold flex-shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}
@@ -281,12 +286,12 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
             {/* Sizes */}
             <div className="mb-10">
-              <h4 className="text-[10px] font-black uppercase text-[#6B4E36] tracking-widest mb-4">Available Packaging</h4>
+              <h4 className="text-[10px] font-black uppercase text-brand-brown tracking-widest mb-4">Available Packaging</h4>
               <div className="flex flex-wrap gap-3">
                 {product.packSizes.map((size: string, idx: number) => (
                   <div
                     key={idx}
-                    className="px-5 py-2.5 rounded-xl border border-[#D4A017]/20 bg-[#FFF8E8]/40 text-xs font-extrabold text-[#3D2410] shadow-sm"
+                    className="px-5 py-2.5 rounded-xl border border-brand-gold/20 bg-brand-gold-light/40 text-xs font-extrabold text-brand-brown-dark shadow-sm"
                   >
                     {size}
                   </div>
@@ -299,9 +304,9 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
       {/* SECTION 2: Recipe Gallery */}
       {recipes.length > 0 && (
-        <section className="bg-[#211209] py-24 border-t border-[#D4A017]/15 relative overflow-hidden">
+        <section className="bg-[#4A3425] py-24 border-t border-brand-gold/15 relative overflow-hidden">
           {/* Subtle background glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(212,160,23,0.08),transparent_50%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(230,126,34,0.08),transparent_50%)] pointer-events-none" />
           
           {/* Embed Keyframe Animation Styles */}
           <style dangerouslySetInnerHTML={{__html: `
@@ -332,18 +337,18 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
             <div className="text-center max-w-2xl mx-auto mb-20 flex flex-col items-center">
               {/* Premium Chef's Ornaments */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#D4A017]" />
-                <Sparkles className="w-5 h-5 text-[#D4A017] animate-pulse" />
-                <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#D4A017]" />
+                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-brand-gold" />
+                <Sparkles className="w-5 h-5 text-brand-gold animate-pulse" />
+                <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-brand-gold" />
               </div>
               
-              <h2 className="font-great-vibes text-6xl sm:text-7xl text-[#FFF8E8] tracking-wider relative inline-block mb-3">
+              <h2 className="text-6xl sm:text-7xl text-white tracking-wider relative inline-block mb-3" style={{fontFamily: "'Great Vibes', cursive"}}>
                 Recipe Gallery
               </h2>
-              <p className="text-[#D4A017] text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
+              <p className="text-[#DAA520] text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
                 Delicious dishes made using Sri Balaji {product.name}
               </p>
-              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#D4A017]/40 to-transparent mt-6 rounded-full" />
+              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent mt-6 rounded-full" />
             </div>
 
             {/* Grid Cards Container */}
@@ -359,41 +364,37 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
-                    whileHover={{ y: -10 }}
-                    className="group relative bg-[#FAF6F0] hover:bg-[#FFFBF2] border-2 border-[#D4A017]/25 hover:border-[#D4A017] rounded-[32px] p-8 shadow-lg hover:shadow-[0_20px_50px_rgba(212,160,23,0.22)] transition-all duration-500 flex flex-col items-center text-center cursor-pointer overflow-hidden"
+                    className="relative bg-white border-2 border-gray-200 rounded-[32px] p-8 shadow-lg transition-all duration-300 flex flex-col items-center text-center overflow-hidden"
                   >
-                    {/* Card background hover glow */}
-                    <div className="absolute -inset-1 bg-gradient-to-b from-[#D4A017]/5 to-[#FFF8E8]/0 rounded-[32px] blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
                     {/* 1. Recipe Name (Top) */}
-                    <h4 className="font-playfair font-black text-[#3D2410] text-2xl mb-2 group-hover:text-[#D4A017] transition-colors duration-300 relative z-10">
+                    <h4 className="font-black text-brand-brown-dark text-xl mb-2 relative z-10" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
                       {recipe.name}
                     </h4>
 
                     {/* Divider Line */}
-                    <div className="w-10 h-0.5 bg-[#D4A017]/40 group-hover:w-20 transition-all duration-500 rounded-full mb-6 relative z-10" />
+                    <div className="w-10 h-0.5 bg-brand-gold/40 transition-all duration-500 rounded-full mb-6 relative z-10" />
 
                     {/* 2. Recipe Image Container (Below Name) */}
-                    <div className="relative w-44 h-44 rounded-full overflow-hidden border-4 border-white group-hover:border-[#D4A017]/50 shadow-md group-hover:shadow-2xl transition-all duration-500 bg-neutral-50 mb-6 z-10 flex-shrink-0 flex items-center justify-center">
+                    <div className="relative w-44 h-44 rounded-full overflow-hidden border-4 border-white shadow-md transition-all duration-300 bg-neutral-50 mb-6 z-10 flex-shrink-0 flex items-center justify-center">
                       {isFailed ? (
-                        <div className="w-full h-full bg-gradient-to-br from-[#FFF9EA] to-[#FFEBB5] flex flex-col items-center justify-center p-4">
-                          <div className="relative w-12 h-12 text-[#D4A017] mb-2 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-[#FFF3E0] to-[#FFE0B2] flex flex-col items-center justify-center p-4">
+                          <div className="relative w-12 h-12 text-brand-gold mb-2 flex items-center justify-center">
                             <Sparkles className="w-10 h-10 animate-pulse" />
                           </div>
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#A37B13]">Recipe Ready</span>
+                          <span className="text-[10px] font-black uppercase tracking-wider text-brand-gold">Recipe Ready</span>
                         </div>
                       ) : (
                         <Image
                           src={recipeImagePath}
                           alt={recipe.name}
                           fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="object-cover transition-transform duration-300"
                           onError={() => setFailedImages(prev => ({ ...prev, [recipeImagePath]: true }))}
                         />
                       )}
                       
                       {/* Inner overlay shadow */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#D4A017]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-gold/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </div>
 
                     {/* Steam waves & rising golden sparkles particles above the image */}
@@ -401,14 +402,14 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                       <div className="relative w-44 h-12 overflow-visible">
                         {/* Wavy steam trail 1 */}
                         <div 
-                          className="absolute bottom-0 left-[35%] w-3 h-20 bg-gradient-to-t from-white/50 via-[#FFF8E8]/35 to-transparent rounded-full blur-[5px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          className="absolute bottom-0 left-[35%] w-3 h-20 bg-gradient-to-t from-white/50 via-brand-gold-light/35 to-transparent rounded-full blur-[5px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                           style={{
                             animation: "steamLeft 2s infinite ease-out",
                           }}
                         />
                         {/* Wavy steam trail 2 */}
                         <div 
-                          className="absolute bottom-0 left-[50%] w-4 h-24 bg-gradient-to-t from-white/60 via-[#D4A017]/25 to-transparent rounded-full blur-[6px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          className="absolute bottom-0 left-[50%] w-4 h-24 bg-gradient-to-t from-white/60 via-brand-gold/25 to-transparent rounded-full blur-[6px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                           style={{
                             animation: "steamRight 2.5s infinite ease-out",
                             animationDelay: "0.4s"
@@ -416,7 +417,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                         />
                         {/* Wavy steam trail 3 */}
                         <div 
-                          className="absolute bottom-0 left-[65%] w-2 h-18 bg-gradient-to-t from-white/50 via-[#FFF8E8]/25 to-transparent rounded-full blur-[4px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          className="absolute bottom-0 left-[65%] w-2 h-18 bg-gradient-to-t from-white/50 via-brand-gold-light/25 to-transparent rounded-full blur-[4px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                           style={{
                             animation: "steamLeft 1.8s infinite ease-out",
                             animationDelay: "0.8s"
@@ -425,7 +426,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
                         {/* Golden light beams/sparkles rising */}
                         <div 
-                          className="absolute bottom-1 left-[38%] w-1.5 h-1.5 bg-[#D4A017] rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          className="absolute bottom-1 left-[38%] w-1.5 h-1.5 bg-brand-gold rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           style={{
                             animation: "floatSparkle 1.8s infinite ease-out",
                             animationDelay: "0.2s",
@@ -433,7 +434,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                           } as React.CSSProperties}
                         />
                         <div 
-                          className="absolute bottom-1 left-[52%] w-1 h-1 bg-[#FFF8E8] rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          className="absolute bottom-1 left-[52%] w-1 h-1 bg-brand-gold-light rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           style={{
                             animation: "floatSparkle 2.2s infinite ease-out",
                             animationDelay: "0.6s",
@@ -441,7 +442,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                           } as React.CSSProperties}
                         />
                         <div 
-                          className="absolute bottom-1 left-[62%] w-1.5 h-1.5 bg-[#D4A017] rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          className="absolute bottom-1 left-[62%] w-1.5 h-1.5 bg-brand-gold rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           style={{
                             animation: "floatSparkle 2s infinite ease-out",
                             animationDelay: "1s",
@@ -451,7 +452,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
                         {/* Golden Glowing Warmth Aura */}
                         <div 
-                          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-28 h-8 bg-gradient-to-t from-[#D4A017]/35 to-transparent rounded-full blur-[12px] opacity-0 group-hover:opacity-100 transition-all duration-500"
+                          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-28 h-8 bg-gradient-to-t from-brand-gold/35 to-transparent rounded-full blur-[12px] opacity-0 group-hover:opacity-100 transition-all duration-500"
                           style={{
                             animation: "glowSteam 2s infinite ease-in-out"
                           }}
@@ -460,12 +461,12 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     </div>
 
                     {/* 3. Short Description (Bottom) */}
-                    <p className="text-[#6B4E36] text-sm leading-relaxed max-w-xs mt-2 group-hover:text-[#3D2410] transition-colors relative z-10 line-clamp-3">
+                    <p className="text-brand-brown-dark text-sm leading-relaxed max-w-xs mt-2 relative z-10 line-clamp-3">
                       {recipe.description}
                     </p>
 
                     {/* Attractive Action CTA inside Card */}
-                    <div className="mt-6 flex items-center gap-1.5 text-[#D4A017]/60 group-hover:text-[#D4A017] transition-colors duration-300 text-xs font-extrabold uppercase tracking-wider relative z-10">
+                    <div className="mt-6 flex items-center gap-1.5 text-white group-hover:text-white transition-colors duration-300 text-xs font-extrabold uppercase tracking-wider relative z-10">
                       <Sparkles className="w-4 h-4" />
                       <span>View Recipe Details</span>
                     </div>
@@ -478,7 +479,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
       )}
 
       {/* 3. Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#2F180B] via-[#3D2410] to-[#4A2B12] text-[#FAF6F0]/70 border-t border-white/5">
+      <footer className="w-full bg-gradient-to-r from-[#2D1B0F] via-[#3D2914] to-[#4D3318] text-white border-t border-white/5">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Footer Row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
@@ -487,12 +488,12 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
               <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white p-0.5">
                 <Image src="/logo.png" alt="Sri Balaji Gold Logo" fill className="object-contain" />
               </div>
-              <span className="font-playfair font-black text-base tracking-[0.28em] text-white whitespace-nowrap">SRI BALAJI GOLD</span>
+              <span className="font-black text-base tracking-[0.28em] text-white whitespace-nowrap" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>SRI BALAJI GOLD</span>
             </div>
 
             {/* Center: Copyright Text */}
             <div className="flex-1 text-center px-4">
-              <p className="m-0 text-xs sm:text-sm leading-relaxed text-[#FAF6F0]/75">
+              <p className="m-0 text-xs sm:text-sm leading-relaxed text-background/75">
                 © {new Date().getFullYear()} Sri Venkatalaxmi Agro Foods. All Rights Reserved.
               </p>
             </div>
@@ -501,13 +502,13 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
             <div className="flex items-center gap-6 shrink-0">
               <a 
                 href="#" 
-                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+                className="text-xs sm:text-sm text-background/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
               >
                 Privacy Policy
               </a>
               <a 
                 href="#" 
-                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+                className="text-xs sm:text-sm text-background/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
               >
                 Terms of Service
               </a>
@@ -516,11 +517,11 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
           {/* Bottom Row: Designer Credit */}
           <div className="border-t border-white/5 pt-4">
-            <p className="text-center text-[10px] sm:text-xs text-[#FAF6F0]/50 leading-relaxed">
+            <p className="text-center text-[10px] sm:text-xs text-background/50 leading-relaxed">
               Designed &amp; Developed by{' '}
               <a
                 href="https://unifirolabs.com"
-                className="text-[#FAF6F0]/60 no-underline transition-all duration-300 hover:text-[#FAF6F0]/90"
+                className="text-background/60 no-underline transition-all duration-300 hover:text-background/90"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
@@ -545,11 +546,11 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-[#D4A017]/20 rounded-[32px] max-w-md w-full p-8 shadow-2xl relative"
+              className="bg-white border border-brand-gold/20 rounded-[32px] max-w-md w-full p-8 shadow-2xl relative"
             >
               <button
                 onClick={() => setInquiryProduct(null)}
-                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full"
+                className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full"
                 aria-label="Close Modal"
               >
                 <X className="w-4 h-4" />
@@ -557,54 +558,54 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
               {inquirySent ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
-                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                  <div className="bg-brand-gold-light text-brand-gold p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="font-playfair text-xl font-black text-[#3D2410] mb-2">Inquiry Submitted!</h3>
-                  <p className="text-[#6B4E36] text-xs max-w-xs leading-relaxed">
+                  <h3 className="font-playfair text-xl font-black text-brand-brown-dark mb-2">Inquiry Submitted!</h3>
+                  <p className="text-brand-brown text-xs max-w-xs leading-relaxed">
                     Thank you for contacting us. Our sales team will reach out to you within 24 business hours with custom pricing.
                   </p>
                 </div>
               ) : (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="relative w-12 h-12 rounded-xl border border-[#D4A017]/25 p-1 bg-[#FAF6F0] flex-shrink-0">
+                    <div className="relative w-12 h-12 rounded-xl border border-brand-gold/25 p-1 bg-background flex-shrink-0">
                       <Image src={inquiryProduct.image} alt={inquiryProduct.name} fill className="object-contain" />
                     </div>
                     <div>
-                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block">Bulk Supply Inquiry</span>
-                      <h3 className="font-playfair font-bold text-[#3D2410] text-sm">{inquiryProduct.name}</h3>
+                      <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block">Bulk Supply Inquiry</span>
+                      <h3 className="font-playfair font-bold text-brand-brown-dark text-sm">{inquiryProduct.name}</h3>
                     </div>
                   </div>
 
                   <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4 text-left">
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Your Name</label>
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Your Name</label>
                       <input
                         type="text"
                         required
                         placeholder="Enter name"
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                       />
                     </div>
 
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Mobile Number</label>
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Mobile Number</label>
                       <input
                         type="tel"
                         required
                         placeholder="Enter mobile number"
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Monthly Quantity</label>
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Monthly Quantity</label>
                         <select
                           value={formData.quantity}
                           onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                          className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                         >
                           {!inquiryProduct.isAvailable && <option>All Sizes / Retail packs</option>}
                           {inquiryProduct.isAvailable && (
@@ -617,13 +618,13 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                         </select>
                       </div>
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Availability</label>
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Availability</label>
                         {inquiryProduct.isAvailable ? (
                           <div className="border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Sparkles className="w-3.5 h-3.5 animate-pulse" /> In Stock
                           </div>
                         ) : (
-                          <div className="border border-[#D4A017]/20 bg-[#FFF8E8] text-[#D4A017] rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                          <div className="border border-brand-gold/20 bg-brand-gold-light text-brand-gold rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Clock className="w-3.5 h-3.5" /> Coming Soon
                           </div>
                         )}
@@ -631,7 +632,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     </div>
 
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">
                         {inquiryProduct.isAvailable ? "Delivery Details / Questions" : "Your City / Custom Requirements"}
                       </label>
                       <textarea
@@ -639,7 +640,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                         placeholder="Enter details..."
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
                       />
                     </div>
 
@@ -671,11 +672,11 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-[#D4A017]/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
+              className="bg-white border border-brand-gold/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
             >
               <button
                 onClick={() => setIsComingSoonOpen(false)}
-                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full z-10"
+                className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full z-10"
                 aria-label="Close Modal"
               >
                 <X className="w-4 h-4" />
@@ -683,18 +684,18 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
               {comingSoonSuccess ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                  <div className="bg-brand-gold-light text-brand-gold p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="font-playfair text-2xl font-black text-[#3D2410] mb-2">Registered Successfully!</h3>
-                  <p className="text-[#6B4E36] text-sm max-w-xs leading-relaxed">
+                  <h3 className="font-playfair text-2xl font-black text-brand-brown-dark mb-2">Registered Successfully!</h3>
+                  <p className="text-brand-brown text-sm max-w-xs leading-relaxed">
                     Thank you! We will notify you immediately as soon as our premium products are launched in your region!
                   </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   {/* Left Column: Product Showcase Carousel */}
-                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#FAF6F0] border border-[#F1E7D8] flex flex-col justify-between p-4 group">
+                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-background border border-brand-green/10 flex flex-col justify-between p-4 group">
                     <div className="relative flex-grow w-full h-[70%]">
                       <AnimatePresence mode="wait">
                         <motion.div
@@ -719,27 +720,27 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                       </AnimatePresence>
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-[#D4A017]/10 text-center relative z-10">
-                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block">
+                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-brand-gold/10 text-center relative z-10">
+                      <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block">
                         {COMING_SOON_PRODUCTS[activeModalProductIndex]?.category || ""}
                       </span>
                       <h4 className="font-playfair font-bold text-brand-brown-dark text-sm mt-0.5">
                         {COMING_SOON_PRODUCTS[activeModalProductIndex]?.name || ""}
                       </h4>
-                      <span className="inline-block mt-1 px-2 py-0.5 text-[8px] font-black tracking-wide uppercase bg-[#D4A017]/15 text-[#D4A017] rounded-md border border-[#D4A017]/25">
+                      <span className="inline-block mt-1 px-2 py-0.5 text-[8px] font-black tracking-wide uppercase bg-brand-gold/15 text-brand-gold rounded-md border border-brand-gold/25">
                         Launching Soon
                       </span>
                     </div>
 
                     <button
                       onClick={prevModalProduct}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-brand-gold/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-brand-gold transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
                     >
                       <ArrowRightIcon className="w-3.5 h-3.5 rotate-180" />
                     </button>
                     <button
                       onClick={nextModalProduct}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-brand-gold/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-brand-gold transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
                     >
                       <ArrowRightIcon className="w-3.5 h-3.5" />
                     </button>
@@ -749,7 +750,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                         <button
                           key={idx}
                           onClick={() => setActiveModalProductIndex(idx)}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${activeModalProductIndex === idx ? "w-4 bg-[#D4A017]" : "w-1 bg-[#D4A017]/30"
+                          className={`h-1.5 rounded-full transition-all duration-300 ${activeModalProductIndex === idx ? "w-4 bg-brand-gold" : "w-1 bg-brand-gold/30"
                             }`}
                         />
                       ))}
@@ -759,28 +760,28 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                   {/* Right Column: Form & Info */}
                   <div className="flex flex-col text-left">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 rounded-full bg-[#FFF8E8] border border-[#D4A017]/20 flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-[#D4A017]" />
+                      <div className="w-8 h-8 rounded-full bg-brand-gold-light border border-brand-gold/20 flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-brand-gold" />
                       </div>
-                      <span className="text-[10px] font-black uppercase text-[#D4A017] tracking-wider">New Product Range</span>
+                      <span className="text-[10px] font-black uppercase text-brand-gold tracking-wider">New Product Range</span>
                     </div>
-                    <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-[#3D2410] leading-tight mb-3">
+                    <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-brand-brown-dark leading-tight mb-3">
                       Coming Soon to Your Kitchen
                     </h3>
-                    <p className="text-[#6B4E36] text-xs leading-relaxed mb-6">
+                    <p className="text-brand-brown text-xs leading-relaxed mb-6">
                       We are expanding our range with premium stone-ground flours, double-roasted ravas, and clean, nutritious millets. Register below to receive launch alerts and exclusive early-bird samples!
                     </p>
 
                     <form onSubmit={handleComingSoonSubmit} className="flex flex-col gap-3">
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Email Address</label>
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Email Address</label>
                         <input
                           type="email"
                           required
                           value={comingSoonEmail}
                           onChange={(e) => setComingSoonEmail(e.target.value)}
                           placeholder="yourname@gmail.com"
-                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold w-full"
+                          className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold w-full"
                         />
                       </div>
 

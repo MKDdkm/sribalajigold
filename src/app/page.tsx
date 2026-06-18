@@ -176,10 +176,10 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#FAF6F0] min-h-screen relative text-brand-brown-dark font-sans selection:bg-brand-gold/20 selection:text-brand-brown-dark">
+    <div className="bg-background min-h-screen relative text-brand-brown-dark font-sans selection:bg-brand-gold/20 selection:text-brand-brown-dark">
       
       {/* 1. Sticky Glassmorphic Navbar */}
-      <header className="sticky top-0 h-[80px] border-b border-[#F1E7D8]/80 bg-[#FAF6F0]/95 backdrop-blur-md z-50 transition-all duration-300">
+      <header className="sticky top-0 h-[80px] border-b border-[#F1E7D8] bg-[#FAF6F0] z-50 transition-all duration-300">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 h-full flex items-center justify-between">
           <a href="#" className="flex items-center gap-3 group">
             <div className="relative w-[140px] h-[60px] mix-blend-multiply">
@@ -194,25 +194,29 @@ export default function Home() {
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-10 font-bold text-sm text-[#3D2410]">
-            <a href="#hero" className="hover:text-[#D4A017] transition-colors duration-300">Home</a>
-            <a href="#products" className="hover:text-[#D4A017] transition-colors duration-300">Products</a>
-            <a href="#about" className="hover:text-[#D4A017] transition-colors duration-300">Our Story</a>
-            <a href="#quality" className="hover:text-[#D4A017] transition-colors duration-300">Quality</a>
+          <nav className="hidden md:flex items-center gap-10 font-bold text-sm text-brand-brown-dark">
+            <a href="#hero" className="hover:text-brand-gold transition-colors duration-300">Home</a>
+            <a href="#products" className="hover:text-brand-gold transition-colors duration-300">Products</a>
+            <a href="#about" className="hover:text-brand-gold transition-colors duration-300">Our Story</a>
+            <a href="#quality" className="hover:text-brand-gold transition-colors duration-300">Quality</a>
             <button
               onClick={() => setIsComingSoonOpen(true)}
-              className="hover:text-[#D4A017] transition-colors duration-300 font-bold text-sm text-[#3D2410] cursor-pointer bg-transparent border-none p-0"
+              className="hover:text-brand-gold transition-colors duration-300 font-bold text-sm text-brand-brown-dark cursor-pointer bg-transparent border-none p-0"
             >
               Coming Soon
             </button>
-            <a href="#contact" className="hover:text-[#D4A017] transition-colors duration-300">Contact</a>
+            <a href="#contact" className="hover:text-brand-gold transition-colors duration-300">Contact</a>
           </nav>
 
           {/* CTA Header Button */}
           <div className="hidden md:block">
             <a
               href="#products"
-              className="bg-[#5A3418] hover:bg-[#3D2410] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-md hover:shadow-lg transition-all duration-300"
+              className="bg-[#6B4423] hover:bg-[#4A2C20] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              style={{
+                backgroundColor: '#6B4423',
+                color: '#ffffff'
+              }}
             >
               Shop Now
             </a>
@@ -221,7 +225,7 @@ export default function Home() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-brand-brown hover:text-brand-gold transition-colors"
+            className="md:hidden p-2 text-brand-brown-dark hover:text-brand-gold transition-colors"
             aria-label="Toggle Menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -236,53 +240,53 @@ export default function Home() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden absolute top-[80px] left-0 right-0 bg-white/95 backdrop-blur-md border-b border-brand-gold/10 px-6 py-6 flex flex-col gap-4 shadow-lg z-50 rounded-b-2xl"
+              className="md:hidden absolute top-[80px] left-0 right-0 bg-white border-b border-brand-gold/10 px-6 py-6 flex flex-col gap-4 shadow-lg z-50 rounded-b-2xl"
             >
               <a
                 href="#hero"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Home
               </a>
               <a
                 href="#products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Products
               </a>
               <a
                 href="#about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Our Story
               </a>
               <a
                 href="#quality"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Quality
               </a>
               <button
                 onClick={() => { setIsComingSoonOpen(true); setIsMobileMenuOpen(false); }}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1 text-left cursor-pointer bg-transparent border-none p-0"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1 text-left cursor-pointer bg-transparent border-none p-0"
               >
                 Coming Soon
               </button>
               <a
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="font-semibold text-brand-brown hover:text-brand-gold py-1"
+                className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Contact
               </a>
               <a
                 href="#products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-[#5A3418] text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
+                className="bg-brand-brown text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
               >
                 Shop Now
               </a>
@@ -293,21 +297,30 @@ export default function Home() {
 
       {/* 2. Hero Section */}
       <section id="hero" className="w-full relative">
-        <div className="w-full h-[540px] md:h-[620px] overflow-hidden relative bg-[#FCF8F2]">
+        <div className="w-full h-[540px] md:h-[620px] overflow-hidden relative bg-background">
           
-          {/* Background Image filling container exactly */}
+          {/* Background Images - Different for Mobile and Desktop */}
           <div className="absolute inset-0 w-full h-full z-0 select-none">
+            {/* Mobile Banner */}
             <Image
-              src="/hero-banner.png"
-              alt="Sri Balaji Gold Traditional Kitchen Scene"
+              src="/hero-banner-mobile.png"
+              alt="Sri Balaji Gold Mobile Banner"
               fill
               priority
-              className="object-cover object-[30%_25%]"
+              className="object-cover object-center md:hidden"
+            />
+            {/* Desktop Banner */}
+            <Image
+              src="/hero-banner.png"
+              alt="Sri Balaji Gold Desktop Banner"
+              fill
+              priority
+              className="object-cover object-[30%_25%] hidden md:block"
             />
           </div>
 
-          {/* Strong ivory gradient overlay on mobile for absolute text legibility, softer on desktop */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FCF8F2]/95 via-[#FCF8F2]/90 to-transparent md:from-[#FCF8F2]/65 md:via-[#FCF8F2]/35 md:to-transparent md:w-[50%] z-10 pointer-events-none" />
+          {/* Lighter gradient overlay for better image visibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/75 via-background/50 to-transparent md:from-background/50 md:via-background/20 md:to-transparent md:w-[50%] z-10 pointer-events-none" />
 
           {/* Left Content Positioned Responsive */}
           <div className="absolute top-[50px] sm:top-[80px] md:top-[120px] left-[24px] md:left-[90px] right-[24px] md:right-auto max-w-full md:max-w-[420px] z-20 flex flex-col items-start">
@@ -317,7 +330,8 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="font-playfair text-4xl sm:text-6xl md:text-[72px] font-[800] text-[#3D2410] leading-[0.95] tracking-tight"
+              className="text-4xl sm:text-6xl md:text-[72px] font-bold text-brand-brown-dark leading-[0.95] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               The Taste <br />
               Every Family
@@ -327,7 +341,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="font-great-vibes text-3xl sm:text-4xl md:text-[56px] font-normal bg-gradient-to-r from-[#D4A017] to-[#B8860B] bg-clip-text text-transparent block mt-1"
+              className="text-3xl sm:text-4xl md:text-[56px] font-normal block mt-1"
+              style={{ 
+                fontFamily: "'Great Vibes', cursive",
+                background: 'linear-gradient(to right, var(--brand-gold), var(--brand-orange))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
             >
               Trusts
             </motion.span>
@@ -337,7 +358,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-[#6B4E36] text-[14px] md:text-[16px] mt-4 md:mt-6 max-w-[350px] leading-relaxed font-medium"
+              className="text-brand-brown-dark text-[14px] md:text-[16px] mt-4 md:mt-6 max-w-[350px] leading-relaxed font-medium"
             >
               For over 40 years, Sri Balaji Gold has been bringing pure, stone-ground flours, ravas, and grains to kitchens across India. Crafted with love, processed for purity.
             </motion.p>
@@ -353,7 +374,11 @@ export default function Home() {
                 href="#products"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-[#5A3418] hover:bg-[#3D2410] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-md hover:shadow-[#5A3418]/10 transition-all duration-300 text-center w-full sm:w-auto"
+                className="bg-[#6B4423] hover:bg-[#4A2C20] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 text-center w-full sm:w-auto"
+                style={{
+                  backgroundColor: '#6B4423',
+                  color: '#ffffff'
+                }}
               >
                 Shop Now
               </motion.a>
@@ -361,7 +386,7 @@ export default function Home() {
                 href="#about"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-white border border-[#D4A017] text-[#5A3418] rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm hover:bg-[#FAF6F0] transition-all duration-300 text-center w-full sm:w-auto"
+                className="bg-white border border-brand-gold text-brand-brown-dark rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm hover:bg-background transition-all duration-300 text-center w-full sm:w-auto"
               >
                 Our Story
               </motion.a>
@@ -372,8 +397,8 @@ export default function Home() {
           {/* Curved Wave Separator at the bottom of the hero banner */}
           <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-20">
             <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="relative block w-full h-[50px] md:h-[90px] translate-y-[1px]">
-              <path d="M0,40 C450,115 950,10 1440,75 L1440,120 L0,120 Z" fill="#FAF6F0" />
-              <path d="M0,40 C450,115 950,10 1440,75" stroke="#D4A017" strokeWidth="3" fill="none" className="opacity-80" />
+              <path d="M0,40 C450,115 950,10 1440,75 L1440,120 L0,120 Z" fill="var(--background)" />
+              <path d="M0,40 C450,115 950,10 1440,75" stroke="var(--brand-gold)" strokeWidth="3" fill="none" className="opacity-80" />
             </svg>
           </div>
 
@@ -386,42 +411,41 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={fadeInUp}
-        className="w-full bg-[#FAF6F0] py-12 md:py-16 border-b border-[#F1E7D8]/60 relative z-30"
+        className="w-full bg-background py-12 md:py-16 border-b border-brand-green/10 relative z-30"
       >
         <div className="max-w-[1240px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          
           {/* Column 1: 40+ Years */}
-          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
-            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
-              <Award className="w-6 h-6 text-[#D4A017]" />
+          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
+              <Award className="w-6 h-6 text-brand-gold" />
             </div>
-            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">40+ Years of</div>
-            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Trusted Quality</div>
+            <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">40+ Years of</div>
+            <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Trusted Quality</div>
           </div>
 
           {/* Column 2: 1000+ Retailers */}
-          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
-            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
-              <Store className="w-6 h-6 text-[#D4A017]" />
+          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
+              <Store className="w-6 h-6 text-brand-gold" />
             </div>
-            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">1000+ Retailers</div>
-            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Across Karnataka</div>
+            <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">1000+ Retailers</div>
+            <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Across Karnataka</div>
           </div>
 
           {/* Column 3: Millions */}
-          <div className="bg-white/65 backdrop-blur-sm border border-[#D4A017]/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(212,160,23,0.08)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.12)] transition-all duration-300">
-            <div className="w-12 h-12 bg-[#FFF8E8] rounded-full flex items-center justify-center border border-[#D4A017]/25 shadow-inner mb-3.5">
-              <Utensils className="w-6 h-6 text-[#D4A017]" />
+          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+            <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
+              <Utensils className="w-6 h-6 text-brand-gold" />
             </div>
-            <div className="text-[#3D2410] font-[800] text-lg md:text-xl leading-snug">Millions of Breakfasts</div>
-            <div className="text-[#D4A017] text-[10px] font-black uppercase tracking-widest mt-1">Served with Love</div>
+            <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">Millions of Breakfasts</div>
+            <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Served with Love</div>
           </div>
 
         </div>
       </motion.section>
 
       {/* 3. Features Cards Section (Positioned below Stats Strip) */}
-      <section className="w-full bg-[#FAF6F0] py-8 md:py-12 relative z-30">
+      <section className="w-full bg-background py-8 md:py-12 relative z-30">
         <div className="max-w-[1240px] mx-auto px-6">
           <motion.div 
             initial="hidden"
@@ -435,13 +459,13 @@ export default function Home() {
             <motion.div 
               variants={fadeInUp}
               whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
             >
-              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
-                <Wheat className="w-6 h-6 text-[#D4A017]" />
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Wheat className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Directly Sourced From Farmers</h3>
+                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Directly Sourced From Farmers</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Premium grains sourced from trusted farming communities.</p>
               </div>
             </motion.div>
@@ -450,13 +474,13 @@ export default function Home() {
             <motion.div 
               variants={fadeInUp}
               whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
             >
-              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
-                <Factory className="w-6 h-6 text-[#D4A017]" />
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Factory className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Sortex Processed</h3>
+                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Sortex Processed</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Advanced technology ensures purity and consistency.</p>
               </div>
             </motion.div>
@@ -465,13 +489,13 @@ export default function Home() {
             <motion.div 
               variants={fadeInUp}
               whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#4E2E16] to-[#2B170B] border border-[#D4A017]/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
             >
-              <div className="bg-white/10 p-3 rounded-xl border border-[#D4A017]/20 flex-shrink-0">
-                <Heart className="w-6 h-6 text-[#D4A017]" />
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Heart className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="font-playfair text-white font-[800] text-[16px] md:text-[18px] leading-tight">Trusted By Mothers</h3>
+                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Trusted By Mothers</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Serving generations with nutritious breakfast essentials.</p>
               </div>
             </motion.div>
@@ -491,7 +515,7 @@ export default function Home() {
       >
         {/* Scattered grains decorative background details */}
         <div className="absolute top-12 left-4 opacity-30 select-none pointer-events-none hidden md:block">
-          <svg width="60" height="80" viewBox="0 0 60 80" fill="none" className="text-[#D4A017]">
+          <svg width="60" height="80" viewBox="0 0 60 80" fill="none" className="text-brand-gold">
             <path d="M10,20 Q20,15 30,30 T50,40" stroke="currentColor" strokeWidth="2" />
             <circle cx="10" cy="20" r="3" fill="currentColor" />
             <circle cx="25" cy="22" r="3" fill="currentColor" />
@@ -500,7 +524,7 @@ export default function Home() {
           </svg>
         </div>
         <div className="absolute bottom-16 right-4 opacity-30 select-none pointer-events-none hidden md:block">
-          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" className="text-[#D4A017]">
+          <svg width="80" height="100" viewBox="0 0 80 100" fill="none" className="text-brand-gold">
             <path d="M20,10 Q40,30 30,60 T60,90" stroke="currentColor" strokeWidth="2" />
             <circle cx="20" cy="10" r="3" fill="currentColor" />
             <circle cx="35" cy="32" r="3" fill="currentColor" />
@@ -510,18 +534,18 @@ export default function Home() {
         </div>
 
         {/* Large container card matching target layout */}
-        <div className="bg-[#F5EFE6] border border-[#E3D7C5] rounded-3xl md:rounded-[32px] p-5 sm:p-8 md:p-14 shadow-lg">
+        <div className="bg-[#EBF2ED] border border-[#D2E3D6] rounded-3xl md:rounded-[32px] p-5 sm:p-8 md:p-14 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10 items-stretch">
             
             {/* Left Column: Text content */}
             <div className="lg:col-span-6 flex flex-col justify-between items-start">
               <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-playfair text-3xl md:text-4xl font-[800] text-[#3D2410] leading-tight">
+                  <h2 className="text-3xl md:text-4xl font-bold text-brand-brown-dark leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
                     The Taste of Tradition <br />
                     Since 1980
                   </h2>
-                  <div className="w-14 h-14 rounded-full overflow-hidden relative border border-[#D4A017]/30 bg-white p-1.5 flex-shrink-0 shadow-sm flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full overflow-hidden relative border border-brand-gold/30 bg-white p-1.5 flex-shrink-0 shadow-sm flex items-center justify-center">
                     <Image
                       src="/logo.png"
                       alt="Lord Balaji Deity"
@@ -532,7 +556,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="text-[#6B4E36] text-sm md:text-base space-y-4 font-medium leading-relaxed">
+                <div className="text-brand-brown-dark text-sm md:text-base space-y-4 font-medium leading-relaxed">
                   <p>
                     Every morning begins with faith, family, and food. Inspired by the trust of Lord Balaji and the love of mothers, Sri Balaji Gold has been a part of countless breakfast tables for over four decades.
                   </p>
@@ -547,8 +571,8 @@ export default function Home() {
 
               {/* Decorative Rice Grains illustration at the bottom left */}
               <div className="mt-8 flex items-center gap-2 text-brand-gold/60">
-                <Wheat className="w-5 h-5 text-[#D4A017]" />
-                <span className="text-[11px] font-bold uppercase tracking-widest text-[#5A3418]/60">Hygienically Packed & Stone Ground</span>
+                <Wheat className="w-5 h-5 text-brand-gold" />
+                <span className="text-[11px] font-bold uppercase tracking-widest text-brand-brown-dark/80">Hygienically Packed & Stone Ground</span>
               </div>
             </div>
 
@@ -581,17 +605,17 @@ export default function Home() {
       </motion.section>
 
       {/* 5. Product Catalog Showcase Section */}
-      <section id="products" className="py-24 bg-white border-y border-brand-brown/5">
+      <section id="products" className="py-24 bg-white border-y border-brand-green/5">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+            <span className="text-xs font-black text-brand-gold tracking-widest uppercase mb-3 block">
               OUR CATALOGUE
             </span>
-            <h2 className="font-playfair text-4xl md:text-5xl font-[800] text-[#3D2410] leading-tight mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-brown-dark leading-tight mb-4" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
               Explore the Sri Balaji Gold Range
             </h2>
-            <p className="text-[#6B4E36] text-base">
+            <p className="text-brand-brown-dark text-base">
               Pure grains, premium flours, and traditional breakfast staples meticulously sorted and packaged for your family.
             </p>
 
@@ -603,8 +627,8 @@ export default function Home() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-300 ${
                     selectedCategory === cat
-                      ? "bg-[#5A3418] text-white shadow-md"
-                      : "bg-[#FAF6F0] text-[#6B4E36] hover:bg-[#FAF6F0] border border-brand-brown/5"
+                      ? "bg-[#6B4423] text-white shadow-lg"
+                      : "bg-white text-brand-brown-dark hover:bg-gray-50 border border-gray-200"
                   }`}
                 >
                   {cat}
@@ -629,7 +653,7 @@ export default function Home() {
                   key={product.id}
                   whileHover={product.isAvailable ? "hover" : undefined}
                   variants={cardHoverEffect}
-                  className={`bg-white rounded-3xl overflow-hidden border-2 flex flex-col h-full transition-all duration-300 group ${
+                  className={`overflow-hidden rounded-3xl border-2 flex flex-col h-full transition-all duration-300 group ${
                     product.isAvailable 
                       ? "cursor-pointer border-brand-green-light/20 hover:border-brand-green-light hover:shadow-2xl" 
                       : "cursor-not-allowed border-gray-200"
@@ -642,9 +666,9 @@ export default function Home() {
                     router.push(`/products/${getProductSlug(product.name)}`);
                   }}
                 >
-                  {/* Image Container with Enhanced Design */}
-                  <div className="relative aspect-square w-full bg-gradient-to-br from-brand-orange-light/30 to-brand-green-light/10 overflow-hidden flex items-center justify-center p-4 md:p-6">
-                    <div className="relative w-full h-full">
+                  {/* Image Container with Enhanced Design - WHITE TOP */}
+                  <div className="relative aspect-square w-full bg-white overflow-hidden flex items-center justify-center p-6 md:p-8">
+                    <div className="relative w-[85%] h-[85%]">
                       {product.isAvailable ? (
                         <Image
                           src={product.image}
@@ -657,8 +681,8 @@ export default function Home() {
                         // Placeholder for upcoming products - no actual packaging revealed
                         <div className="w-full h-full flex items-center justify-center">
                           <div className="text-center space-y-4">
-                            <div className="w-32 h-32 md:w-40 md:h-40 mx-auto bg-gradient-to-br from-brand-green/10 to-brand-orange/10 rounded-3xl border-4 border-dashed border-brand-green/30 flex items-center justify-center backdrop-blur-sm">
-                              <div className="text-6xl md:text-7xl">📦</div>
+                            <div className="w-28 h-28 md:w-36 md:h-36 mx-auto bg-gradient-to-br from-brand-green/10 to-brand-orange/10 rounded-3xl border-4 border-dashed border-brand-green/30 flex items-center justify-center backdrop-blur-sm">
+                              <div className="text-5xl md:text-6xl">📦</div>
                             </div>
                           </div>
                         </div>
@@ -673,7 +697,7 @@ export default function Home() {
                       </div>
                     )}
                     {/* Category badge */}
-                    <span className="absolute top-3 md:top-4 left-3 md:left-4 bg-white/95 backdrop-blur-sm border border-brand-green/20 text-[#3D2410] text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
+                    <span className="absolute top-3 md:top-4 left-3 md:left-4 bg-white/95 backdrop-blur-sm border border-brand-green/20 text-brand-brown-dark text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
                       {product.category}
                     </span>
                     {/* Availability badge - Only show for available products */}
@@ -684,12 +708,12 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Description Box with Enhanced Styling */}
-                  <div className="p-4 md:p-6 flex flex-col flex-grow bg-gradient-to-b from-white to-brand-orange-light/10">
-                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#3D2410] mb-2 group-hover:text-[#6B4E36] transition-colors line-clamp-1">
+                  {/* Description Box with Enhanced Styling - BROWN BOTTOM */}
+                  <div className="p-4 md:p-6 flex flex-col flex-grow bg-[#F5F0E8]">
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-brand-brown-dark mb-2 group-hover:text-brand-brown transition-colors line-clamp-1">
                       {product.name}
                     </h3>
-                    <p className="text-[#3D2410]/70 text-xs md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2 md:line-clamp-3">
+                    <p className="text-brand-brown-dark/70 text-xs md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2 md:line-clamp-3">
                       {product.description}
                     </p>
 
@@ -697,8 +721,8 @@ export default function Home() {
                     <div className="hidden sm:flex flex-col gap-2 mb-4">
                       {product.features.slice(0, 2).map((feat, idx) => (
                         <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-[#D4A017] flex-shrink-0" />
-                          <span className="text-xs font-medium text-[#3D2410]/80">{feat}</span>
+                          <CheckCircle2 className="w-4 h-4 text-brand-gold flex-shrink-0" />
+                          <span className="text-xs font-medium text-brand-brown-dark/80">{feat}</span>
                         </div>
                       ))}
                     </div>
@@ -707,13 +731,13 @@ export default function Home() {
                     <div className="flex items-center justify-between border-t border-brand-green/10 pt-4 mt-auto">
                       {product.isAvailable ? (
                         <div className="w-full">
-                          <span className="text-[9px] md:text-[11px] text-[#6B4E36] uppercase font-semibold block">Available Sizes</span>
-                          <span className="text-xs md:text-sm font-bold text-[#3D2410] block mt-1">{product.packSizes.join(" • ")}</span>
+                          <span className="text-[9px] md:text-[11px] text-brand-brown-dark uppercase font-semibold block">Available Sizes</span>
+                          <span className="text-xs md:text-sm font-bold text-brand-brown-dark block mt-1">{product.packSizes.join(" • ")}</span>
                         </div>
                       ) : (
                         <div className="w-full">
-                          <span className="text-[9px] md:text-[11px] text-[#D4A017] uppercase font-bold tracking-wider block truncate">Launching Soon</span>
-                          <span className="text-xs md:text-sm font-bold text-[#3D2410]/70 block truncate">{product.packSizes.slice(0, 2).join(" / ")}</span>
+                          <span className="text-[9px] md:text-[11px] text-brand-gold uppercase font-bold tracking-wider block truncate">Launching Soon</span>
+                          <span className="text-xs md:text-sm font-bold text-brand-brown-dark/70 block truncate">{product.packSizes.slice(0, 2).join(" / ")}</span>
                         </div>
                       )}
                     </div>
@@ -735,22 +759,22 @@ export default function Home() {
         variants={fadeInUp}
         className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-24"
       >
-        <div className="bg-[#3D2410] text-[#FAF6F0] rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
+        <div className="bg-[#4A3425] text-background rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
           {/* Subtle golden design bg elements */}
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#D4A017] opacity-[0.07] blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-[#FFF8E8] opacity-[0.05] blur-3xl pointer-events-none" />
+          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-brand-gold opacity-[0.07] blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-brand-gold-light opacity-[0.05] blur-3xl pointer-events-none" />
 
           <div className="flex flex-col lg:flex-row gap-10 items-center justify-between relative z-10">
             {/* Left Content */}
             <div className="w-full lg:w-[58%] flex flex-col justify-between">
               <div>
-                <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+                <span className="text-xs font-black text-white tracking-widest uppercase mb-3 block">
                   OUR GOLD STANDARD
                 </span>
-                <h2 className="font-playfair text-4xl md:text-5xl font-[800] text-white leading-tight mb-6">
+                <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
                   Quality Assurance In Every Grain
                 </h2>
-                <p className="text-white/80 text-base md:text-lg mb-8 leading-relaxed">
+                <p className="text-white text-base md:text-lg mb-8 leading-relaxed font-medium">
                   Every single packet of Sri Balaji Gold undergoes rigorous testing. From seed selection and farm checks to multi-barrier sorting and hygienic packaging, our state-of-the-art facility guarantees optimal kitchen performance.
                 </p>
               </div>
@@ -764,39 +788,39 @@ export default function Home() {
                   onClick={() => setCurrentQualityIndex(0)}
                   className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
                     currentQualityIndex === 0 
-                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      ? "bg-white/10 border-brand-gold/40 shadow-lg" 
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">01</div>
+                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>01</div>
                   <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
-                  <p className="text-white/70 text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                  <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
                 </button>
                 
                 <button 
                   onClick={() => setCurrentQualityIndex(1)}
                   className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
                     currentQualityIndex === 1 
-                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      ? "bg-white/10 border-brand-gold/40 shadow-lg" 
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">02</div>
+                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>02</div>
                   <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
-                  <p className="text-white/70 text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                  <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
                 </button>
 
                 <button 
                   onClick={() => setCurrentQualityIndex(2)}
                   className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
                     currentQualityIndex === 2 
-                      ? "bg-white/10 border-[#D4A017]/40 shadow-lg" 
+                      ? "bg-white/10 border-brand-gold/40 shadow-lg" 
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-extrabold text-[#D4A017] font-playfair mb-1">03</div>
+                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>03</div>
                   <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
-                  <p className="text-white/70 text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                  <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
                 </button>
               </motion.div>
 
@@ -816,9 +840,9 @@ export default function Home() {
                     />
                   </div>
                   <div>
-                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">01</div>
+                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>01</div>
                     <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
-                    <p className="text-white/70 text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                    <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
                   </div>
                 </motion.div>
 
@@ -833,9 +857,9 @@ export default function Home() {
                     />
                   </div>
                   <div>
-                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">02</div>
+                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>02</div>
                     <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
-                    <p className="text-white/70 text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                    <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
                   </div>
                 </motion.div>
 
@@ -850,9 +874,9 @@ export default function Home() {
                     />
                   </div>
                   <div>
-                    <div className="text-xl font-extrabold text-[#D4A017] font-playfair mb-1">03</div>
+                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>03</div>
                     <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
-                    <p className="text-white/70 text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                    <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
                   </div>
                 </motion.div>
               </motion.div>
@@ -894,7 +918,7 @@ export default function Home() {
                     key={idx}
                     onClick={() => setCurrentQualityIndex(idx)}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                      currentQualityIndex === idx ? "w-8 bg-[#D4A017]" : "w-2 bg-white/40 hover:bg-white/70"
+                      currentQualityIndex === idx ? "w-8 bg-brand-gold" : "w-2 bg-white/40 hover:bg-white/70"
                     }`}
                   />
                 ))}
@@ -911,50 +935,50 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={fadeInUp}
-        className="py-12 md:py-24 bg-[#FAF6F0] border-t border-brand-brown/5"
+        className="py-12 md:py-24 bg-background border-t border-brand-green/5"
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
           
           {/* Left Column: Direct info */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            <span className="text-xs font-black text-[#D4A017] tracking-widest uppercase mb-3 block">
+            <span className="text-xs font-black text-brand-gold tracking-widest uppercase mb-3 block">
               PARTNERSHIP & INQUIRIES
             </span>
-            <h2 className="font-playfair text-4xl font-[800] text-[#3D2410] leading-tight mb-6">
+            <h2 className="text-4xl font-bold text-brand-brown-dark leading-tight mb-6" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
               Become a Retailer or Get Bulk Supplies
             </h2>
-            <p className="text-[#6B4E36] mb-8 leading-relaxed">
+            <p className="text-brand-brown-dark mb-8 leading-relaxed">
               We supply retail giants, supermarkets, and local grocery stores with premium flour and grains. Send us a message to request custom bulk price catalogues or samples.
             </p>
 
             <div className="flex flex-col gap-6">
               <div className="flex items-start gap-4">
-                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-brand-gold/10">
+                <div className="bg-brand-gold-light text-brand-gold p-3 rounded-xl border border-brand-gold/10">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-brown-dark text-sm">Main Processing Unit</h4>
-                  <p className="text-[#6B4E36] text-xs mt-1">Sri Venkatalaxmi Agro Foods, Marlanhalli, Karatagi, Koppal District, Karnataka, India</p>
+                  <p className="text-brand-brown-dark text-xs mt-1">Sri Venkatalaxmi Agro Foods, Marlanhalli, Karatagi, Koppal District, Karnataka, India</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-[#D4A017]/10">
+                <div className="bg-brand-gold-light text-brand-gold p-3 rounded-xl border border-brand-gold/10">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-brown-dark text-sm">Customer Helpline</h4>
-                  <p className="text-[#6B4E36] text-xs mt-1">+91 96205 27147</p>
+                  <p className="text-brand-brown-dark text-xs mt-1">+91 96205 27147</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="bg-[#FFF8E8] text-[#D4A017] p-3 rounded-xl border border-[#D4A017]/10">
+                <div className="bg-brand-gold-light text-brand-gold p-3 rounded-xl border border-brand-gold/10">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-brown-dark text-sm">Email Support</h4>
-                  <p className="text-[#6B4E36] text-xs mt-1">srivenkatalaxmiagrofoods@gmail.com</p>
+                  <p className="text-brand-brown text-xs mt-1">srivenkatalaxmiagrofoods@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -962,37 +986,37 @@ export default function Home() {
 
           {/* Right Column: Inquiry Form Card */}
           <div className="lg:col-span-7">
-            <div className="bg-white border border-[#D4A017]/15 rounded-3xl p-5 sm:p-8 md:p-10 shadow-xl">
-              <h3 className="font-playfair text-2xl font-[800] text-[#3D2410] mb-2">Send an Inquiry</h3>
-              <p className="text-[#6B4E36] text-xs mb-6">Our sales representative will connect with you within 24 business hours.</p>
+            <div className="bg-white border border-brand-gold/15 rounded-3xl p-5 sm:p-8 md:p-10 shadow-xl">
+              <h3 className="text-2xl font-bold text-brand-brown-dark mb-2" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Send an Inquiry</h3>
+              <p className="text-brand-brown-dark text-xs mb-6">Our sales representative will connect with you within 24 business hours.</p>
 
               <form onSubmit={(e) => { e.preventDefault(); alert("Thank you for your interest! Our team will get back to you shortly."); }} className="flex flex-col gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Your Name</label>
+                    <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Your Name</label>
                     <input
                       type="text"
                       required
                       placeholder="Enter name"
-                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                      className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Phone Number</label>
+                    <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Phone Number</label>
                     <input
                       type="tel"
                       required
                       placeholder="Enter mobile number"
-                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                      className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Interested Product</label>
+                    <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Interested Product</label>
                     <select
-                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold appearance-none"
+                      className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold appearance-none"
                     >
                       <option>All Products Catalogue</option>
                       {PRODUCTS.map(p => (
@@ -1001,30 +1025,34 @@ export default function Home() {
                     </select>
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Approx. Monthly Requirement</label>
+                    <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Approx. Monthly Requirement</label>
                     <input
                       type="text"
                       placeholder="e.g. 500 kg"
-                      className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                      className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1.5">Message / Delivery Address Details</label>
+                  <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Message / Delivery Address Details</label>
                   <textarea
                     rows={4}
                     placeholder="Enter details..."
-                    className="border border-[#D4A017]/20 rounded-xl px-4 py-3 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
+                    className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="bg-[#5A3418] hover:bg-[#3D2410] text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                  className="w-full bg-brand-brown hover:bg-brand-brown-dark text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+                  style={{
+                    backgroundColor: '#6B4423',
+                    color: '#ffffff'
+                  }}
                 >
-                  <Send className="w-4 h-4" />
-                  Submit Inquiry
+                  <Send className="w-5 h-5" />
+                  Send Inquiry
                 </button>
               </form>
             </div>
@@ -1034,7 +1062,7 @@ export default function Home() {
       </motion.section>
 
       {/* 8. Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#2F180B] via-[#3D2410] to-[#4A2B12] text-[#FAF6F0]/70 border-t border-white/5">
+      <footer className="w-full bg-gradient-to-r from-[#2D1B0F] via-[#3D2914] to-[#4D3318] text-white border-t border-white/5">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Footer Row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
@@ -1043,12 +1071,12 @@ export default function Home() {
               <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white p-0.5">
                 <Image src="/logo.png" alt="Sri Balaji Gold Logo" fill className="object-contain" />
               </div>
-              <span className="font-playfair font-black text-base tracking-[0.28em] text-white whitespace-nowrap">SRI BALAJI GOLD</span>
+              <span className="font-black text-base tracking-[0.28em] text-white whitespace-nowrap" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>SRI BALAJI GOLD</span>
             </div>
 
             {/* Center: Copyright Text */}
             <div className="flex-1 text-center px-4">
-              <p className="m-0 text-xs sm:text-sm leading-relaxed text-[#FAF6F0]/75">
+              <p className="m-0 text-xs sm:text-sm leading-relaxed text-background/75">
                 © {new Date().getFullYear()} Sri Venkatalaxmi Agro Foods. All Rights Reserved.
               </p>
             </div>
@@ -1057,13 +1085,13 @@ export default function Home() {
             <div className="flex items-center gap-6 shrink-0">
               <a 
                 href="#" 
-                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+                className="text-xs sm:text-sm text-background/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
               >
                 Privacy Policy
               </a>
               <a 
                 href="#" 
-                className="text-xs sm:text-sm text-[#FAF6F0]/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
+                className="text-xs sm:text-sm text-background/70 transition-colors duration-300 hover:text-white whitespace-nowrap"
               >
                 Terms of Service
               </a>
@@ -1072,11 +1100,11 @@ export default function Home() {
 
           {/* Bottom Row: Designer Credit */}
           <div className="border-t border-white/5 pt-4">
-            <p className="text-center text-[10px] sm:text-xs text-[#FAF6F0]/50 leading-relaxed">
+            <p className="text-center text-[10px] sm:text-xs text-background/50 leading-relaxed">
               Designed &amp; Developed by{' '}
               <a
                 href="https://unifirolabs.com"
-                className="text-[#FAF6F0]/60 no-underline transition-all duration-300 hover:text-[#FAF6F0]/90"
+                className="text-background/60 no-underline transition-all duration-300 hover:text-background/90"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
@@ -1101,11 +1129,11 @@ export default function Home() {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-[#D4A017]/20 rounded-[32px] max-w-md w-full p-8 shadow-2xl relative"
+              className="bg-white border border-brand-gold/20 rounded-[32px] max-w-md w-full p-8 shadow-2xl relative"
             >
               <button
                 onClick={() => setInquiryProduct(null)}
-                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full"
+                className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full"
                 aria-label="Close Modal"
               >
                 <X className="w-4 h-4" />
@@ -1113,10 +1141,10 @@ export default function Home() {
 
               {inquirySent ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                  <div className="bg-brand-gold-light text-brand-gold p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="font-playfair text-xl font-black text-[#3D2410] mb-2">
+                  <h3 className="font-playfair text-xl font-black text-brand-brown-dark mb-2">
                     {inquiryProduct.isAvailable ? "Request Submitted!" : "Registration Complete!"}
                   </h3>
                   <p className="text-brand-brown-light text-xs max-w-xs">
@@ -1130,7 +1158,7 @@ export default function Home() {
               ) : (
                 <>
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#FAF6F0] border border-[#D4A017]/15 p-1 flex-shrink-0">
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-background border border-brand-gold/15 p-1 flex-shrink-0">
                       <Image
                         src={inquiryProduct.image}
                         alt={inquiryProduct.name}
@@ -1139,47 +1167,47 @@ export default function Home() {
                       />
                     </div>
                     <div>
-                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block mb-0.5">
+                      <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block mb-0.5">
                         {inquiryProduct.isAvailable ? "Quick Price Quote" : "Register Launch Alert"}
                       </span>
-                      <h3 className="font-playfair text-lg font-extrabold text-[#3D2410] leading-tight">{inquiryProduct.name}</h3>
+                      <h3 className="font-playfair text-lg font-extrabold text-brand-brown-dark leading-tight">{inquiryProduct.name}</h3>
                     </div>
                   </div>
 
                   <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Your Name</label>
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Your Name</label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Ramesh Kumar"
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                       />
                     </div>
 
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Phone Number</label>
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Phone Number</label>
                       <input
                         type="tel"
                         required
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="e.g. +91 98765 43210"
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">
                           {inquiryProduct.isAvailable ? "Quantity Needed" : "Interested Size"}
                         </label>
                         <select
                           value={formData.quantity}
                           onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
+                          className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                         >
                           {inquiryProduct.packSizes.map((size, idx) => (
                             <option key={idx}>{size}</option>
@@ -1195,13 +1223,13 @@ export default function Home() {
                         </select>
                       </div>
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Availability</label>
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Availability</label>
                         {inquiryProduct.isAvailable ? (
                           <div className="border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Sparkles className="w-3 h-3 animate-pulse" /> In Stock
                           </div>
                         ) : (
-                          <div className="border border-[#D4A017]/20 bg-[#FFF8E8] text-[#D4A017] rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                          <div className="border border-brand-gold/20 bg-brand-gold-light text-brand-gold rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Clock className="w-3 h-3" /> Coming Soon
                           </div>
                         )}
@@ -1209,7 +1237,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">
+                      <label className="text-[10px] font-black uppercase text-brand-brown mb-1">
                         {inquiryProduct.isAvailable ? "Delivery Details / Questions" : "Your City / Custom Requirements"}
                       </label>
                       <textarea
@@ -1217,16 +1245,21 @@ export default function Home() {
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                         placeholder="Enter details..."
-                        className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
+                        className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="bg-brand-brown hover:bg-brand-brown-dark text-white rounded-lg py-3 font-extrabold text-xs shadow-md mt-2 flex items-center justify-center gap-2"
+                      className="w-full bg-brand-brown hover:bg-brand-brown-dark text-white rounded-lg py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 mt-4 flex items-center justify-center gap-2 cursor-pointer border-none"
+                      style={{
+                        backgroundColor: 'var(--brand-brown)',
+                        color: '#ffffff',
+                        fontWeight: 'bold'
+                      }}
                     >
-                      <Send className="w-3.5 h-3.5" />
-                      {inquiryProduct.isAvailable ? "Request Instant Quote" : "Register For Launch Notification"}
+                      <Send className="w-4 h-4" />
+                      <span>{inquiryProduct.isAvailable ? "Submit Inquiry" : "Register For Launch"}</span>
                     </button>
                   </form>
                 </>
@@ -1249,11 +1282,11 @@ export default function Home() {
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-[#D4A017]/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
+              className="bg-white border border-brand-gold/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
             >
               <button
                 onClick={() => setIsComingSoonOpen(false)}
-                className="absolute top-6 right-6 text-[#6B4E36] hover:text-[#3D2410] p-1 bg-[#FAF6F0] rounded-full z-10"
+                className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full z-10"
                 aria-label="Close Modal"
               >
                 <X className="w-4 h-4" />
@@ -1261,18 +1294,18 @@ export default function Home() {
 
               {comingSoonSuccess ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="bg-[#FFF8E8] text-[#D4A017] p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
+                  <div className="bg-brand-gold-light text-brand-gold p-4 rounded-full border border-brand-gold/20 mb-4 animate-bounce">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="font-playfair text-2xl font-black text-[#3D2410] mb-2">Registered Successfully!</h3>
-                  <p className="text-[#6B4E36] text-sm max-w-xs leading-relaxed">
+                  <h3 className="font-playfair text-2xl font-black text-brand-brown-dark mb-2">Registered Successfully!</h3>
+                  <p className="text-brand-brown text-sm max-w-xs leading-relaxed">
                     Thank you! We will notify you immediately as soon as our premium products are launched in your region!
                   </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   {/* Left Column: Product Showcase Carousel */}
-                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#FAF6F0] border border-[#F1E7D8] flex flex-col justify-between p-4 group">
+                  <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-background border border-brand-green/10 flex flex-col justify-between p-4 group">
                     {/* Active product slide */}
                     <div className="relative flex-grow w-full h-[70%]">
                       <AnimatePresence mode="wait">
@@ -1299,14 +1332,14 @@ export default function Home() {
                     </div>
 
                     {/* Product Meta details */}
-                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-[#D4A017]/10 text-center relative z-10">
-                      <span className="text-[9px] font-black uppercase text-[#D4A017] tracking-wider block">
+                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-brand-gold/10 text-center relative z-10">
+                      <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block">
                         {COMING_SOON_PRODUCTS[activeModalProductIndex]?.category || ""}
                       </span>
                       <h4 className="font-playfair font-bold text-brand-brown-dark text-sm mt-0.5">
                         {COMING_SOON_PRODUCTS[activeModalProductIndex]?.name || ""}
                       </h4>
-                      <span className="inline-block mt-1 px-2 py-0.5 text-[8px] font-black tracking-wide uppercase bg-[#D4A017]/15 text-[#D4A017] rounded-md border border-[#D4A017]/25">
+                      <span className="inline-block mt-1 px-2 py-0.5 text-[8px] font-black tracking-wide uppercase bg-brand-gold/15 text-brand-gold rounded-md border border-brand-gold/25">
                         Launching Soon
                       </span>
                     </div>
@@ -1314,13 +1347,13 @@ export default function Home() {
                     {/* Carousel Controls */}
                     <button
                       onClick={prevModalProduct}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-brand-gold/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-brand-gold transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
                     >
                       <ArrowRight className="w-3.5 h-3.5 rotate-180" />
                     </button>
                     <button
                       onClick={nextModalProduct}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-[#D4A017]/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-[#D4A017] transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-brand-gold/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-brand-gold transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
                     >
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -1332,7 +1365,7 @@ export default function Home() {
                           key={idx}
                           onClick={() => setActiveModalProductIndex(idx)}
                           className={`h-1 rounded-full transition-all duration-300 ${
-                            activeModalProductIndex === idx ? "w-4 bg-[#D4A017]" : "w-1 bg-[#D4A017]/30"
+                            activeModalProductIndex === idx ? "w-4 bg-brand-gold" : "w-1 bg-brand-gold/30"
                           }`}
                         />
                       ))}
@@ -1342,28 +1375,28 @@ export default function Home() {
                   {/* Right Column: Form & Info */}
                   <div className="flex flex-col text-left">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 rounded-full bg-[#FFF8E8] border border-[#D4A017]/20 flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-[#D4A017]" />
+                      <div className="w-8 h-8 rounded-full bg-brand-gold-light border border-brand-gold/20 flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-brand-gold" />
                       </div>
-                      <span className="text-[10px] font-black uppercase text-[#D4A017] tracking-wider">New Product Range</span>
+                      <span className="text-[10px] font-black uppercase text-brand-gold tracking-wider">New Product Range</span>
                     </div>
-                    <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-[#3D2410] leading-tight mb-3">
+                    <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-brand-brown-dark leading-tight mb-3">
                       Coming Soon to Your Kitchen
                     </h3>
-                    <p className="text-[#6B4E36] text-xs leading-relaxed mb-6">
+                    <p className="text-brand-brown-dark text-xs leading-relaxed mb-6">
                       We are expanding our range with premium stone-ground flours, double-roasted ravas, and clean, nutritious millets. Register below to receive launch alerts and exclusive early-bird samples!
                     </p>
 
                     <form onSubmit={handleComingSoonSubmit} className="flex flex-col gap-3">
                       <div className="flex flex-col">
-                        <label className="text-[10px] font-black uppercase text-[#6B4E36] mb-1">Email Address</label>
+                        <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Email Address</label>
                         <input
                           type="email"
                           required
                           value={comingSoonEmail}
                           onChange={(e) => setComingSoonEmail(e.target.value)}
                           placeholder="yourname@gmail.com"
-                          className="border border-[#D4A017]/25 rounded-lg px-3.5 py-2.5 text-xs bg-[#FAF6F0] focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold w-full"
+                          className="border border-brand-gold/25 rounded-lg px-3.5 py-2.5 text-xs bg-background focus:outline-none focus:ring-1 focus:ring-brand-gold text-brand-brown-dark font-semibold w-full"
                         />
                       </div>
 
