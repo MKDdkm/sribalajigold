@@ -167,9 +167,9 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
           <div className="hidden md:block">
             <Link
               href="/#products"
-              className="bg-[#6B4423] hover:bg-[#4A2C20] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#1E5631] hover:bg-[#163D24] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
               style={{
-                backgroundColor: '#6B4423',
+                backgroundColor: '#1E5631',
                 color: '#ffffff'
               }}
             >

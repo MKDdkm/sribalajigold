@@ -212,9 +212,9 @@ export default function Home() {
           <div className="hidden md:block">
             <a
               href="#products"
-              className="bg-[#6B4423] hover:bg-[#4A2C20] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#1E5631] hover:bg-[#163D24] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
               style={{
-                backgroundColor: '#6B4423',
+                backgroundColor: '#1E5631',
                 color: '#ffffff'
               }}
             >
@@ -286,7 +286,7 @@ export default function Home() {
               <a
                 href="#products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-brand-brown text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
+                className="bg-[#1E5631] text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
               >
                 Shop Now
               </a>
@@ -374,9 +374,9 @@ export default function Home() {
                 href="#products"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-[#6B4423] hover:bg-[#4A2C20] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 text-center w-full sm:w-auto"
+                className="bg-[#1E5631] hover:bg-[#163D24] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 text-center w-full sm:w-auto"
                 style={{
-                  backgroundColor: '#6B4423',
+                  backgroundColor: '#1E5631',
                   color: '#ffffff'
                 }}
               >
