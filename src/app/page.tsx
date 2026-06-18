@@ -319,11 +319,11 @@ export default function Home() {
             />
           </div>
 
-          {/* Lighter gradient overlay for better image visibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/75 via-background/50 to-transparent md:from-background/50 md:via-background/20 md:to-transparent md:w-[50%] z-10 pointer-events-none" />
+          {/* Lighter gradient overlay for desktop only */}
+          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-background/50 via-background/20 to-transparent w-[50%] z-10 pointer-events-none" />
 
-          {/* Left Content Positioned Responsive */}
-          <div className="absolute top-[50px] sm:top-[80px] md:top-[120px] left-[24px] md:left-[90px] right-[24px] md:right-auto max-w-full md:max-w-[420px] z-20 flex flex-col items-start">
+          {/* Left Content Positioned Responsive - Hidden on mobile since newspaper ad has text */}
+          <div className="hidden md:flex absolute top-[50px] sm:top-[80px] md:top-[120px] left-[24px] md:left-[90px] right-[24px] md:right-auto max-w-full md:max-w-[420px] z-20 flex-col items-start">
             
             {/* Heading text */}
             <motion.h1
