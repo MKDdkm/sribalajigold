@@ -759,7 +759,7 @@ export default function Home() {
         variants={fadeInUp}
         className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-24"
       >
-        <div className="bg-[#4A3425] text-background rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
+        <div className="bg-[#1E5631] text-background rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
           {/* Subtle golden design bg elements */}
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-brand-gold opacity-[0.07] blur-3xl pointer-events-none" />
           <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-brand-gold-light opacity-[0.05] blur-3xl pointer-events-none" />
