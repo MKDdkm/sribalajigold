@@ -798,70 +798,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* 3. Features Cards Section (Positioned below Stats Strip) */}
-      <section className="w-full bg-background py-8 md:py-12 relative z-30">
-        <div className="max-w-[1240px] mx-auto px-6">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
-          >
-            
-            {/* Directly Sourced */}
-            <motion.div 
-              variants={featureCardVariants}
-              whileHover={deviceType === "desktop" ? "hover" : undefined}
-              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
-              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
-            >
-              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
-                <Wheat className="w-6 h-6 text-brand-gold" />
-              </div>
-              <div>
-                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Directly Sourced From Farmers</h3>
-                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Premium grains sourced from trusted farming communities.</p>
-              </div>
-            </motion.div>
-            
-            {/* Sortex Processed */}
-            <motion.div 
-              variants={featureCardVariants}
-              whileHover={deviceType === "desktop" ? "hover" : undefined}
-              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
-              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
-            >
-              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
-                <Factory className="w-6 h-6 text-brand-gold" />
-              </div>
-              <div>
-                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Sortex Processed</h3>
-                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Advanced technology ensures purity and consistency.</p>
-              </div>
-            </motion.div>
-
-            {/* Trusted By Mothers */}
-            <motion.div 
-              variants={featureCardVariants}
-              whileHover={deviceType === "desktop" ? "hover" : undefined}
-              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
-              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
-            >
-              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
-                <Heart className="w-6 h-6 text-brand-gold" />
-              </div>
-              <div>
-                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Trusted By Mothers</h3>
-                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Serving generations with nutritious breakfast essentials.</p>
-              </div>
-            </motion.div>
-
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 4. Heritage Story Section */}
+      {/* 3. Heritage Story Section */}
       <motion.section 
         id="about" 
         initial="hidden"
@@ -961,6 +898,69 @@ export default function Home() {
         </div>
       </motion.section>
 
+      {/* 4. Features Cards Section (Positioned below Heritage Story) */}
+      <section className="w-full bg-background py-8 md:py-12 relative z-30">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+          >
+            
+            {/* Directly Sourced */}
+            <motion.div 
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Wheat className="w-6 h-6 text-brand-gold" />
+              </div>
+              <div>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Directly Sourced From Farmers</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Premium grains sourced from trusted farming communities.</p>
+              </div>
+            </motion.div>
+            
+            {/* Sortex Processed */}
+            <motion.div 
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Factory className="w-6 h-6 text-brand-gold" />
+              </div>
+              <div>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Sortex Processed</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Advanced technology ensures purity and consistency.</p>
+              </div>
+            </motion.div>
+
+            {/* Trusted By Mothers */}
+            <motion.div 
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
+            >
+              <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
+                <Heart className="w-6 h-6 text-brand-gold" />
+              </div>
+              <div>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Trusted By Mothers</h3>
+                <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Serving generations with nutritious breakfast essentials.</p>
+              </div>
+            </motion.div>
+
+          </motion.div>
+        </div>
+      </section>
+
       {/* 5. Product Catalog Showcase Section */}
       <section id="products" className="py-24 bg-white border-y border-brand-green/5">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
@@ -1012,7 +1012,7 @@ export default function Home() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-150 ${
                       selectedCategory === cat
-                        ? "bg-[#6B4423] text-white shadow-lg"
+                        ? "bg-[#C87445] text-white shadow-lg"
                         : "bg-white text-brand-brown-dark hover:bg-gray-50 border border-gray-200"
                     }`}
                   >
@@ -1103,7 +1103,7 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">01</div>
+                  <div className="font-serif text-2xl font-bold text-white mb-1">01</div>
                   <motion.div 
                     initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
                     whileInView={{ width: "100%" }}
@@ -1130,7 +1130,7 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">02</div>
+                  <div className="font-serif text-2xl font-bold text-white mb-1">02</div>
                   <motion.div 
                     initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
                     whileInView={{ width: "100%" }}
@@ -1157,7 +1157,7 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">03</div>
+                  <div className="font-serif text-2xl font-bold text-white mb-1">03</div>
                   <motion.div 
                     initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
                     whileInView={{ width: "100%" }}
@@ -1204,7 +1204,7 @@ export default function Home() {
                     />
                   </motion.div>
                   <div>
-                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">01</div>
+                    <div className="font-serif text-xl font-bold text-white mb-1">01</div>
                     <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
                     <motion.div
                       initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
@@ -1239,7 +1239,7 @@ export default function Home() {
                     />
                   </motion.div>
                   <div>
-                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">02</div>
+                    <div className="font-serif text-xl font-bold text-white mb-1">02</div>
                     <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
                     <motion.div
                       initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
@@ -1274,7 +1274,7 @@ export default function Home() {
                     />
                   </motion.div>
                   <div>
-                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">03</div>
+                    <div className="font-serif text-xl font-bold text-white mb-1">03</div>
                     <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
                     <motion.div
                       initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
