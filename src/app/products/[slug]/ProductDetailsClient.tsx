@@ -249,9 +249,6 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
           {/* Right Side: Product Details */}
           <div className="flex-grow flex flex-col text-left">
-            <span className="text-xs font-black uppercase tracking-widest text-brand-gold mb-2 block">
-              {product.category}
-            </span>
             <h1 className="text-4xl sm:text-5xl font-black text-brand-brown-dark leading-tight mb-4" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
               {product.name}
             </h1>

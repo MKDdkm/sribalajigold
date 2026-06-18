@@ -19,7 +19,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "premium-idly-rava",
     name: "Premium Idly Rava",
-    category: "Ravas & Sujis",
+    category: "Ravas",
     isAvailable: true,
     image: "/products/idly rawa.png",
     description: "Premium double-roasted idly rava made from the finest grains, perfect for soft, fluffy, and authentic idlis.",
@@ -29,7 +29,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "bombay-suji",
     name: "Bombay Suji",
-    category: "Ravas & Sujis",
+    category: "Ravas",
     isAvailable: false,
     image: "/products/bombay suji.jpeg",
     description: "Superior quality Bombay Suji ground from premium wheat. Ideal for crispy rava dosas, soft upmas, and delicious kesari bath.",
@@ -39,7 +39,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "bansi-suji",
     name: "Bansi Suji",
-    category: "Ravas & Sujis",
+    category: "Ravas",
     isAvailable: false,
     image: "/products/bansi suji.jpeg",
     description: "Traditional golden Bansi Suji made from premium durum wheat. Yields rich aroma and excellent texture for sheera and ladoos.",

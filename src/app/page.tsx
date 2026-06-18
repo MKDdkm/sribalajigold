@@ -78,7 +78,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isComingSoonOpen]);
 
-  const categories = ["All", "Ravas & Sujis", "Healthy Flours", "Premium Rice", "Pohas & Millets"];
+  const categories = ["All", "Ravas", "Healthy Flours", "Premium Rice", "Pohas & Millets"];
 
   const filteredProducts = selectedCategory === "All"
     ? PRODUCTS
