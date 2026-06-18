@@ -1342,7 +1342,7 @@ export default function Home() {
                                 src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
                                 alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
                                 fill
-                                className="object-contain"
+                                className="object-contain blur-md"
                               />
                             )}
                           </div>
