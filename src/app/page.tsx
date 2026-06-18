@@ -1062,7 +1062,7 @@ export default function Home() {
       </motion.section>
 
       {/* 8. Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#2D1B0F] via-[#3D2914] to-[#4D3318] text-white border-t border-white/5">
+      <footer className="w-full bg-gradient-to-r from-[#163D24] via-[#1E5631] to-[#256A3F] text-white border-t border-white/5">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Footer Row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
