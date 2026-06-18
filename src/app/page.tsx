@@ -1045,9 +1045,9 @@ export default function Home() {
 
                 <button
                   type="submit"
-                  className="w-full bg-brand-brown hover:bg-brand-brown-dark text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+                  className="w-full bg-[#1E5631] hover:bg-[#163D24] text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-4"
                   style={{
-                    backgroundColor: '#6B4423',
+                    backgroundColor: '#1E5631',
                     color: '#ffffff'
                   }}
                 >
