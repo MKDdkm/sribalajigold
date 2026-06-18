@@ -33,6 +33,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1, h2, h3, h4, h5, h6, .font-serif, .font-playfair {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
 /* Layout helpers to keep footer at the bottom without overlapping */
 .site-root {
   min-height: 100vh;
@@ -61,3 +65,41 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, var(--brand-brown-dark), var(--brand-gold));
 }
+
+/* Custom Animation Easing and Keyframes */
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-float-slow {
+  animation: floatAnimation 4s ease-in-out infinite;
+}
+
+@keyframes clipReveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-clip-reveal {
+  animation: clipReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Responsive snap-scroll utilities for mobile swiping */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-align-center {
+  scroll-snap-align: center;
+}

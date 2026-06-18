@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   CheckCircle2,
   Send,
@@ -22,6 +22,89 @@ import {
   type Recipe
 } from "@/app/products-data";
 
+function getRecipeDetails(recipeName: string) {
+  const name = recipeName.toLowerCase();
+  if (name.includes("idli")) {
+    return {
+      time: "20 mins",
+      servings: "4 servings",
+      ingredients: [
+        "2 cups Sri Balaji Idly Rava",
+        "1 cup Urad Dal (washed)",
+        "Salt to taste",
+        "Water for grinding and batter"
+      ],
+      steps: [
+        "Wash and soak urad dal in water for 4 hours.",
+        "Grind urad dal to a smooth, fluffy batter.",
+        "Wash Sri Balaji Idly Rava, squeeze out water, and mix with the urad dal batter.",
+        "Add salt, mix well, and ferment overnight (8-10 hours).",
+        "Grease idli plates, pour batter, and steam for 10-12 minutes.",
+        "Serve hot with coconut chutney and sambar."
+      ]
+    };
+  } else if (name.includes("dosa")) {
+    return {
+      time: "15 mins",
+      servings: "3 servings",
+      ingredients: [
+        "1.5 cups Sri Balaji Rava (Bombay/Bansi)",
+        "1/2 cup Rice Flour",
+        "1/2 cup Curd / Yogurt",
+        "1 chopped Onion & Green Chilies",
+        "Ghee or oil for cooking"
+      ],
+      steps: [
+        "In a bowl, mix Rava, Rice flour, curd, and water to make a thin watery batter.",
+        "Add chopped onions, green chilies, cumin seeds, and salt.",
+        "Let the batter rest for 20 minutes.",
+        "Heat a tawa, pour batter from outer edge towards center (do not spread).",
+        "Drizzle ghee on sides, cook until golden brown and crispy.",
+        "Serve hot with potato masala."
+      ]
+    };
+  } else if (name.includes("upma") || name.includes("bath") || name.includes("sheera") || name.includes("halwa")) {
+    return {
+      time: "15 mins",
+      servings: "4 servings",
+      ingredients: [
+        "1 cup Sri Balaji Bombay/Bansi Suji",
+        "2 tablespoons Ghee or Oil",
+        "1/2 teaspoon Mustard seeds & Urad dal",
+        "1 Onion, finely chopped",
+        "Mixed Vegetables (carrots, peas, beans)",
+        "2.5 cups Water"
+      ],
+      steps: [
+        "Dry roast Sri Balaji Suji until fragrant (if not pre-roasted). Set aside.",
+        "Heat oil/ghee in a pan, temper mustard seeds, urad dal, and curry leaves.",
+        "Add onions, green chilies, and vegetables. Sauté until tender.",
+        "Pour water and bring to a boil. Add salt to taste.",
+        "Reduce heat, add roasted suji slowly while stirring continuously to avoid lumps.",
+        "Cover and cook on low heat for 5 minutes. Drizzle ghee and serve."
+      ]
+    };
+  } else {
+    return {
+      time: "25 mins",
+      servings: "4 servings",
+      ingredients: [
+        "2 cups Sri Balaji Flour/Rice/Poha",
+        "1 cup Water or Milk",
+        "Spices to taste (cumin, mustard, turmeric)",
+        "Fresh herbs (coriander, curry leaves)"
+      ],
+      steps: [
+        "Prepare the base ingredient as per package instructions.",
+        "Mix with specified liquids and knead/blend to the desired consistency.",
+        "Season with fresh spices, salt, and herbs.",
+        "Cook on a medium heat griddle or steam as required.",
+        "Serve warm with fresh accompaniments."
+      ]
+    };
+  }
+}
+
 export default function ProductDetailsClient({ slug }: { slug: string }) {
   const router = useRouter();
 
@@ -31,6 +114,26 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
   const product = slugConfig ? PRODUCTS.find((p: Product) => p.id === slugConfig.id) : null;
   const folderName = slugConfig ? slugConfig.folderName : "";
   const recipes = product ? PRODUCT_RECIPES[product.id] || [] : [];
+
+  // Responsive device type detection state
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setDeviceType("mobile");
+      } else if (width < 1024) {
+        setDeviceType("tablet");
+      } else {
+        setDeviceType("desktop");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Modal & Navigation States
   const [isComingSoonOpen, setIsComingSoonOpen] = useState<boolean>(false);
@@ -63,6 +166,32 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
     }, 3000);
     return () => clearInterval(interval);
   }, [isComingSoonOpen, COMING_SOON_PRODUCTS.length]);
+
+  const modalContainerVariants = {
+    hidden: {
+      opacity: deviceType === "mobile" ? 1 : 0,
+      scale: deviceType === "desktop" ? 0.9 : 1,
+      y: deviceType === "mobile" ? "100%" : (deviceType === "tablet" ? 400 : 0)
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: deviceType === "desktop" ? ([0.34, 1.56, 0.64, 1] as [number, number, number, number]) : ("easeOut" as const)
+      }
+    },
+    exit: {
+      opacity: deviceType === "mobile" ? 1 : 0,
+      scale: deviceType === "desktop" ? 0.9 : 1,
+      y: deviceType === "mobile" ? "100%" : (deviceType === "tablet" ? 400 : 0),
+      transition: {
+        duration: 0.3,
+        ease: "easeIn" as const
+      }
+    }
+  };
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,9 +296,9 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
           <div className="hidden md:block">
             <Link
               href="/#products"
-              className="bg-[#1E5631] hover:bg-[#163D24] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#C87445] hover:bg-[#A9582D] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
               style={{
-                backgroundColor: '#1E5631',
+                backgroundColor: '#C87445',
                 color: '#ffffff'
               }}
             >
@@ -249,13 +378,13 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
 
           {/* Right Side: Product Details */}
           <div className="flex-grow flex flex-col text-left">
-            <h1 className="text-4xl sm:text-5xl font-black text-brand-brown-dark leading-tight mb-4" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+            <h1 className="font-serif text-4xl sm:text-5xl font-black text-brand-brown-dark leading-tight mb-4">
               {product.name}
             </h1>
 
             {/* Status Badge */}
             {product.isAvailable ? (
-              <div className="inline-flex items-center gap-1.5 border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-full px-4 py-1.5 text-xs font-extrabold w-max mb-8">
+              <div className="inline-flex items-center gap-1.5 border border-[#EAD7CD] bg-[#F8EFEA] text-[#C87445] rounded-full px-4 py-1.5 text-xs font-extrabold w-max mb-8">
                 <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Available / In Stock
               </div>
             ) : (
@@ -346,22 +475,33 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 Delicious dishes made using Sri Balaji {product.name}
               </p>
               <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent mt-6 rounded-full" />
-            </div>
-
-            {/* Grid Cards Container */}
+            </div>            {/* Grid Cards Container */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto px-4">
               {recipes.map((recipe: Recipe, idx: number) => {
                 const recipeImagePath = `/recepies/${folderName}/${recipe.image}`;
                 const isFailed = failedImages[recipeImagePath];
 
+                const cardInitial = deviceType === "desktop" ? { opacity: 0, y: 30 } : { opacity: 0 };
+                const cardWhileInView = deviceType === "desktop" ? { opacity: 1, y: 0 } : { opacity: 1 };
+                const cardTransition = deviceType === "desktop"
+                  ? ({ duration: 0.5, delay: idx * 0.08, ease: "easeOut" } as const)
+                  : ({ duration: 0.4 } as const);
+
                 return (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={cardInitial}
+                    whileInView={cardWhileInView}
                     viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
-                    className="relative bg-white border-2 border-gray-200 rounded-[32px] p-8 shadow-lg transition-all duration-300 flex flex-col items-center text-center overflow-hidden"
+                    transition={cardTransition}
+                    onClick={() => {
+                      if (deviceType === "tablet" || deviceType === "desktop") {
+                        setSelectedRecipe(recipe);
+                      }
+                    }}
+                    className={`relative bg-white border-2 border-gray-200 rounded-[32px] p-8 shadow-lg transition-all duration-300 flex flex-col items-center text-center overflow-hidden group ${
+                      deviceType === "mobile" ? "" : "cursor-pointer hover:shadow-xl hover:border-brand-gold/30"
+                    }`}
                   >
                     {/* 1. Recipe Name (Top) */}
                     <h4 className="font-black text-brand-brown-dark text-xl mb-2 relative z-10" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
@@ -372,7 +512,9 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     <div className="w-10 h-0.5 bg-brand-gold/40 transition-all duration-500 rounded-full mb-6 relative z-10" />
 
                     {/* 2. Recipe Image Container (Below Name) */}
-                    <div className="relative w-44 h-44 rounded-full overflow-hidden border-4 border-white shadow-md transition-all duration-300 bg-neutral-50 mb-6 z-10 flex-shrink-0 flex items-center justify-center">
+                    <div className={`relative w-44 h-44 rounded-full overflow-hidden border-4 border-white shadow-md bg-neutral-50 mb-6 z-10 flex-shrink-0 flex items-center justify-center ${
+                      deviceType === "desktop" ? "animate-float-slow group-hover:rotate-5 group-hover:scale-105 transition-all duration-300" : ""
+                    }`}>
                       {isFailed ? (
                         <div className="w-full h-full bg-gradient-to-br from-[#FFF3E0] to-[#FFE0B2] flex flex-col items-center justify-center p-4">
                           <div className="relative w-12 h-12 text-brand-gold mb-2 flex items-center justify-center">
@@ -431,7 +573,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                           } as React.CSSProperties}
                         />
                         <div 
-                          className="absolute bottom-1 left-[52%] w-1 h-1 bg-brand-gold-light rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          className="absolute bottom-1 left-[52%] w-1.5 h-1.5 bg-brand-gold-light rounded-full filter blur-[0.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           style={{
                             animation: "floatSparkle 2.2s infinite ease-out",
                             animationDelay: "0.6s",
@@ -463,10 +605,12 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     </p>
 
                     {/* Attractive Action CTA inside Card */}
-                    <div className="mt-6 flex items-center gap-1.5 text-white group-hover:text-white transition-colors duration-300 text-xs font-extrabold uppercase tracking-wider relative z-10">
-                      <Sparkles className="w-4 h-4" />
-                      <span>View Recipe Details</span>
-                    </div>
+                    {deviceType !== "mobile" && (
+                      <div className="mt-6 inline-flex items-center gap-1.5 bg-[#C87445]/10 text-[#C87445] group-hover:bg-[#C87445] group-hover:text-white transition-all duration-300 px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider relative z-10">
+                        <Sparkles className="w-4 h-4" />
+                        <span>View Recipe Details</span>
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
@@ -475,8 +619,106 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
         </section>
       )}
 
+      {/* Side Slide-Over Recipe Detail Panel for Tablet and Desktop */}
+      <AnimatePresence>
+        {selectedRecipe && (deviceType === "tablet" || deviceType === "desktop") && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedRecipe(null)}
+              className="fixed inset-0 z-[60] bg-black"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 250 }}
+              className="fixed top-0 right-0 h-screen w-full sm:w-[450px] bg-white z-[70] shadow-2xl flex flex-col border-l border-brand-gold/10"
+            >
+              <div className="p-6 border-b border-brand-gold/10 flex justify-between items-center bg-brand-gold-light/40">
+                <div>
+                  <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block">Recipe Details</span>
+                  <h3 className="font-playfair text-xl font-bold text-brand-brown-dark">{selectedRecipe.name}</h3>
+                </div>
+                <button
+                  onClick={() => setSelectedRecipe(null)}
+                  className="text-brand-brown hover:text-brand-brown-dark p-2 bg-background hover:bg-gray-100 rounded-full transition-all border-none cursor-pointer flex items-center justify-center"
+                  aria-label="Close panel"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-brand-gold-light border border-brand-gold/10 flex items-center justify-center p-4">
+                  <Image
+                    src={`/recepies/${folderName}/${selectedRecipe.image}`}
+                    alt={selectedRecipe.name}
+                    fill
+                    className="object-cover"
+                    onError={() => {}}
+                  />
+                </div>
+
+                {(() => {
+                  const details = getRecipeDetails(selectedRecipe.name);
+                  return (
+                    <>
+                      <div className="flex justify-around items-center py-3 px-4 bg-brand-gold-light/20 rounded-xl border border-brand-gold/5 text-xs text-brand-brown-dark font-semibold">
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="w-4 h-4 text-brand-gold" />
+                          <span>Prep Time: {details.time}</span>
+                        </div>
+                        <div className="w-[1px] h-4 bg-brand-gold/25" />
+                        <div className="flex items-center gap-1.5">
+                          <Sparkles className="w-4 h-4 text-brand-gold" />
+                          <span>Serves: {details.servings}</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="font-playfair font-bold text-sm text-brand-brown-dark mb-1.5">About the dish</h4>
+                        <p className="text-xs text-brand-brown-dark/80 leading-relaxed">{selectedRecipe.description}</p>
+                      </div>
+
+                      <div>
+                        <h4 className="font-playfair font-bold text-sm text-brand-brown-dark mb-2">Ingredients Needed</h4>
+                        <ul className="space-y-2 p-0 m-0 list-none">
+                          {details.ingredients.map((ing, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-xs text-brand-brown-dark/90">
+                              <CheckCircle2 className="w-4 h-4 text-brand-gold flex-shrink-0 mt-0.5" />
+                              <span>{ing}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-playfair font-bold text-sm text-brand-brown-dark mb-2">Instructions</h4>
+                        <ol className="space-y-3 p-0 m-0 list-none">
+                          {details.steps.map((step, idx) => (
+                            <li key={idx} className="flex items-start gap-3 text-xs text-brand-brown-dark/90">
+                              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#C87445] text-white text-[10px] font-bold shrink-0 mt-0.5">
+                                {idx + 1}
+                              </span>
+                              <span className="leading-relaxed">{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* 3. Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#163D24] via-[#1E5631] to-[#256A3F] text-white border-t border-white/5">
+      <footer className="w-full bg-gradient-to-r from-[#A9582D] via-[#C87445] to-[#DE8857] text-white border-t border-white/5">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Footer Row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
@@ -485,7 +727,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
               <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white p-0.5">
                 <Image src="/logo.png" alt="Sri Balaji Gold Logo" fill className="object-contain" />
               </div>
-              <span className="font-black text-base tracking-[0.28em] text-white whitespace-nowrap" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>SRI BALAJI GOLD</span>
+              <span className="font-serif font-black text-base tracking-[0.28em] text-white whitespace-nowrap">SRI BALAJI GOLD</span>
             </div>
 
             {/* Center: Copyright Text */}
@@ -617,7 +859,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                       <div className="flex flex-col">
                         <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Availability</label>
                         {inquiryProduct.isAvailable ? (
-                          <div className="border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                          <div className="border border-[#EAD7CD] bg-[#F8EFEA] text-[#C87445] rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Sparkles className="w-3.5 h-3.5 animate-pulse" /> In Stock
                           </div>
                         ) : (
@@ -663,14 +905,33 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex ${
+              deviceType === "mobile" ? "items-end p-0" : "items-center justify-center p-4"
+            }`}
           >
             <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-brand-gold/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
+              variants={modalContainerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              drag={deviceType === "mobile" ? "y" : false}
+              dragConstraints={{ top: 0, bottom: 300 }}
+              dragElastic={0.15}
+              onDragEnd={(event, info) => {
+                if (deviceType === "mobile" && info.offset.y > 150) {
+                  setIsComingSoonOpen(false);
+                }
+              }}
+              className={`bg-white border border-brand-gold/25 relative ${
+                deviceType === "mobile"
+                  ? "w-full h-[80vh] rounded-t-[32px] rounded-b-none p-6 pb-12 overflow-y-auto"
+                  : "rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl"
+              }`}
             >
+              {deviceType === "mobile" && (
+                <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+              )}
+
               <button
                 onClick={() => setIsComingSoonOpen(false)}
                 className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full z-10"
@@ -693,6 +954,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   {/* Left Column: Product Showcase Carousel */}
                   <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-background border border-brand-green/10 flex flex-col justify-between p-4 group">
+                    {/* Active product slide */}
                     <div className="relative flex-grow w-full h-[70%]">
                       <AnimatePresence mode="wait">
                         <motion.div
@@ -703,20 +965,46 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                           transition={{ duration: 0.3 }}
                           className="absolute inset-0 flex items-center justify-center"
                         >
-                          <div className="relative w-full h-full">
+                          <div className="relative w-full h-full bg-gradient-to-br from-brand-gold-light/30 to-background flex flex-col items-center justify-center p-4">
                             {COMING_SOON_PRODUCTS[activeModalProductIndex] && (
-                              <Image
-                                src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
-                                alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
-                                fill
-                                className="object-contain"
-                              />
+                              <>
+                                <motion.div
+                                  key={`modal-img-${activeModalProductIndex}`}
+                                  initial={{ y: -50, opacity: 0 }}
+                                  animate={{ y: 0, opacity: 1 }}
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 15,
+                                    delay: 0.55
+                                  }}
+                                  className="relative w-36 h-36 mb-2"
+                                >
+                                  <Image
+                                    src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
+                                    alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
+                                    fill
+                                    className="object-contain"
+                                  />
+                                </motion.div>
+                                <div className="text-center">
+                                  <h3 className="font-serif text-xl font-black text-brand-gold mb-1">
+                                    COMING SOON
+                                  </h3>
+                                  <div className="flex items-center justify-center gap-2">
+                                    <div className="w-6 h-[1px] bg-brand-gold/60"></div>
+                                    <Sparkles className="w-4 h-4 text-brand-gold animate-pulse" />
+                                    <div className="w-6 h-[1px] bg-brand-gold/60"></div>
+                                  </div>
+                                </div>
+                              </>
                             )}
                           </div>
                         </motion.div>
                       </AnimatePresence>
                     </div>
 
+                    {/* Product Meta details */}
                     <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-brand-gold/10 text-center relative z-10">
                       <span className="text-[9px] font-black uppercase text-brand-gold tracking-wider block">
                         {COMING_SOON_PRODUCTS[activeModalProductIndex]?.category || ""}
@@ -729,6 +1017,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                       </span>
                     </div>
 
+                    {/* Carousel Controls */}
                     <button
                       onClick={prevModalProduct}
                       className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-brand-gold/20 p-1.5 rounded-full shadow-md text-brand-brown hover:text-brand-gold transition-all z-10 opacity-0 group-hover:opacity-100 flex items-center justify-center"
@@ -742,13 +1031,15 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                       <ArrowRightIcon className="w-3.5 h-3.5" />
                     </button>
 
+                    {/* Indicator dots */}
                     <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
                       {COMING_SOON_PRODUCTS.map((_: Product, idx: number) => (
                         <button
                           key={idx}
                           onClick={() => setActiveModalProductIndex(idx)}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${activeModalProductIndex === idx ? "w-4 bg-brand-gold" : "w-1 bg-brand-gold/30"
-                            }`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            activeModalProductIndex === idx ? "w-4 bg-brand-gold" : "w-1 bg-brand-gold/30"
+                          }`}
                         />
                       ))}
                     </div>

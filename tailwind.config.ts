@@ -20,8 +20,9 @@ const config: Config = {
         "brand-orange-light": "var(--brand-orange-light)",
       },
       fontFamily: {
-        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
-        montserrat: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        sans: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        poppins: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        serif: ["var(--font-playfair)", "Georgia", "serif"],
         playfair: ["var(--font-playfair)", "Georgia", "serif"],
         "great-vibes": ["var(--font-great-vibes)", "cursive"],
       },

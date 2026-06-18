@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence, Variants, useScroll, useTransform } from "framer-motion";
 import {
   Award,
   Store,
@@ -36,10 +36,245 @@ const QUALITY_IMAGES = [
 
 const COMING_SOON_PRODUCTS = PRODUCTS.filter(p => !p.isAvailable);
 
+// Helper component for responsive and interactive Product Cards
+interface ProductCardProps {
+  product: Product;
+  deviceType: "mobile" | "tablet" | "desktop";
+  router: { push: (url: string) => void };
+  index: number;
+}
+
+function ProductCard({ product, deviceType, router, index }: ProductCardProps) {
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, shadow: false });
+  const [isTapped, setIsTapped] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (deviceType !== "desktop" || !product.isAvailable) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+    const rotateX = ((yc - y) / yc) * 6; // max 6 deg
+    const rotateY = ((x - xc) / xc) * 6; // max 6 deg
+    setTilt({ rotateX, rotateY, shadow: true });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ rotateX: 0, rotateY: 0, shadow: false });
+  };
+
+  const initialAnim = deviceType === "desktop" ? { opacity: 0, y: 30 } : (deviceType === "tablet" ? { opacity: 0 } : undefined);
+  const whileInViewAnim = deviceType === "desktop" ? { opacity: 1, y: 0 } : (deviceType === "tablet" ? { opacity: 1 } : undefined);
+  const transitionAnim = deviceType === "desktop"
+    ? ({ duration: 0.6, delay: index * 0.1, ease: "easeOut" } as const)
+    : (deviceType === "tablet" ? ({ duration: 0.5 } as const) : undefined);
+
+  return (
+    <motion.div
+      layout={deviceType !== "mobile"}
+      initial={initialAnim}
+      whileInView={whileInViewAnim}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={transitionAnim}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={() => deviceType !== "desktop" && setIsTapped(true)}
+      onTouchEnd={() => deviceType !== "desktop" && setIsTapped(false)}
+      style={
+        deviceType === "desktop" && product.isAvailable
+          ? {
+              transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+              transition: "transform 0.1s ease-out, box-shadow 0.3s ease-out",
+              boxShadow: tilt.shadow ? "0 25px 50px -12px rgba(200, 116, 69, 0.25)" : "none"
+            }
+          : undefined
+      }
+      className={`overflow-hidden rounded-3xl border-2 flex flex-col h-full transition-all duration-300 group scroll-snap-align-center shrink-0 w-[280px] md:w-auto ${
+        product.isAvailable
+          ? "cursor-pointer border-brand-green-light/20 hover:border-brand-green-light hover:shadow-2xl"
+          : "cursor-not-allowed border-gray-200"
+      } ${
+        deviceType === "tablet" && isTapped ? "scale-[0.98] duration-100" : ""
+      } ${
+        deviceType === "tablet" && !isTapped ? "active:scale-[1.02] duration-100" : ""
+      } ${
+        deviceType === "mobile" && isTapped ? "opacity-90 duration-75" : ""
+      }`}
+      onClick={(e) => {
+        if (!product.isAvailable) return;
+        if ((e.target as HTMLElement).closest("button")) return;
+        router.push(`/products/${getProductSlug(product.name)}`);
+      }}
+    >
+      {/* Image Container with Enhanced Design - WHITE TOP */}
+      <div className="relative aspect-square w-full bg-white overflow-hidden flex items-center justify-center p-6 md:p-8">
+        <div className="relative w-[85%] h-[85%]">
+          {product.isAvailable ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-contain transition-all duration-500 group-hover:scale-110"
+              style={product.id === "premium-idly-rava" ? { mixBlendMode: "multiply" } : {}}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto bg-gradient-to-br from-brand-green/10 to-brand-orange/10 rounded-3xl border-4 border-dashed border-brand-green/30 flex items-center justify-center backdrop-blur-sm">
+                  <div className="text-5xl md:text-6xl">📦</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        {!product.isAvailable && (
+          <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[6px]">
+            <div className="bg-gradient-to-r from-brand-orange to-brand-green text-white px-5 py-2.5 rounded-full text-sm md:text-base font-bold uppercase tracking-wide shadow-2xl border-2 border-white" style={{textShadow: '2px 2px 8px rgba(0,0,0,0.8)'}}>
+              Launching Next
+            </div>
+          </div>
+        )}
+        <span className="absolute top-3 md:top-4 left-3 md:left-4 bg-white/95 backdrop-blur-sm border border-brand-green/20 text-brand-brown-dark text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
+          {product.category}
+        </span>
+        {product.isAvailable && (
+          <span className="absolute top-3 md:top-4 right-3 md:right-4 bg-[#C87445] text-white text-[8px] md:text-[9px] font-bold uppercase tracking-wide px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
+            ✓ Available
+          </span>
+        )}
+      </div>
+
+      {/* Description Box with Enhanced Styling - BROWN BOTTOM */}
+      <div className="p-4 md:p-6 flex flex-col flex-grow bg-[#F5F0E8]">
+        <h3 className="text-sm sm:text-base md:text-lg font-bold text-brand-brown-dark mb-2 group-hover:text-brand-brown transition-colors line-clamp-1">
+          {product.name}
+        </h3>
+        <p className="text-brand-brown-dark/70 text-xs md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2 md:line-clamp-3">
+          {product.description}
+        </p>
+
+        <div className="hidden sm:flex flex-col gap-2 mb-4">
+          {product.features.slice(0, 2).map((feat, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-brand-gold flex-shrink-0" />
+              <span className="text-xs font-medium text-brand-brown-dark/80">{feat}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between border-t border-brand-green/10 pt-4 mt-auto">
+          {product.isAvailable ? (
+            <div className="w-full">
+              <span className="text-[9px] md:text-[11px] text-brand-brown-dark uppercase font-semibold block">Available Sizes</span>
+              <span className="text-xs md:text-sm font-bold text-brand-brown-dark block mt-1">{product.packSizes.join(" • ")}</span>
+            </div>
+          ) : (
+            <div className="w-full">
+              <span className="text-[9px] md:text-[11px] text-brand-gold uppercase font-bold tracking-wider block truncate">Launching Soon</span>
+              <span className="text-xs md:text-sm font-bold text-brand-brown-dark/70 block truncate">{product.packSizes.slice(0, 2).join(" / ")}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const router = useRouter();
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">("desktop");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  
+  const categories = ["All", "Ravas", "Healthy Flours", "Premium Rice", "Pohas & Millets"];
+  const filteredProducts = selectedCategory === "All"
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.category === selectedCategory);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setDeviceType("mobile");
+      } else if (width < 1024) {
+        setDeviceType("tablet");
+      } else {
+        setDeviceType("desktop");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Product list auto-scroll ref and effect for mobile view
+  const productContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (deviceType !== "mobile") return;
+    const container = productContainerRef.current;
+    if (!container) return;
+
+    // Reset scroll to beginning immediately on mount or filter change
+    container.scrollLeft = 0;
+
+    const scrollSpeed = 0.5; // slow, smooth scrolling (pixels per frame)
+    let animationFrameId: number;
+    let isPaused = false;
+    let resumeTimeout: NodeJS.Timeout;
+
+    const scroll = () => {
+      if (!isPaused && container) {
+        container.scrollLeft += scrollSpeed;
+        // Seamless loop: reset to 0 once we've scrolled past the first set of products
+        if (container.scrollLeft >= container.scrollWidth / 2) {
+          container.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    const handleTouchStart = () => {
+      isPaused = true;
+      clearTimeout(resumeTimeout);
+    };
+
+    const handleTouchEnd = () => {
+      // Resume slow motion scroll 3 seconds after user finishes manual swipe/touch
+      resumeTimeout = setTimeout(() => {
+        isPaused = false;
+      }, 3000);
+    };
+
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    // Start auto-scroll loop after a 1.5s delay to let the user see the first products initially
+    const delayTimeout = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(scroll);
+    }, 1500);
+
+    return () => {
+      clearTimeout(delayTimeout);
+      cancelAnimationFrame(animationFrameId);
+      clearTimeout(resumeTimeout);
+      if (container) {
+        container.removeEventListener("touchstart", handleTouchStart);
+        container.removeEventListener("touchend", handleTouchEnd);
+      }
+    };
+  }, [deviceType, filteredProducts]);
+
+  // Ref and scroll transform hook for Quality section parallax
+  const qualitySectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: qualitySectionRef,
+    offset: ["start end", "end start"]
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+
   const [inquiryProduct, setInquiryProduct] = useState<Product | null>(null);
   const [inquirySent, setInquirySent] = useState<boolean>(false);
   const [formData, setFormData] = useState({ name: "", phone: "", quantity: "100 kg", notes: "" });
@@ -81,20 +316,57 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isComingSoonOpen]);
 
-  const categories = ["All", "Ravas", "Healthy Flours", "Premium Rice", "Pohas & Millets"];
-
-  const filteredProducts = selectedCategory === "All"
-    ? PRODUCTS
-    : PRODUCTS.filter(p => p.category === selectedCategory);
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const isAvail = inquiryProduct?.isAvailable ?? true;
+    const typeHeader = isAvail ? "Quick Price Quote" : "Register Launch Alert";
+    
+    const message = `*Sri Balaji Gold - Product Inquiry*
+---------------------------------------
+*Type:* ${typeHeader}
+*Product:* ${inquiryProduct?.name || ""}
+*Name:* ${formData.name}
+*Phone:* ${formData.phone}
+*Quantity/Size:* ${formData.quantity}
+*Notes/Details:* ${formData.notes}
+---------------------------------------`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/919620527147?text=${encodedMessage}`;
+    
     setInquirySent(true);
+    window.open(whatsappUrl, "_blank");
+
     setTimeout(() => {
       setInquirySent(false);
       setInquiryProduct(null);
       setFormData({ name: "", phone: "", quantity: "100 kg", notes: "" });
     }, 3000);
+  };
+
+  const handleMainInquirySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const phone = formData.get("phone") as string;
+    const product = formData.get("product") as string;
+    const requirement = formData.get("requirement") as string;
+    const details = formData.get("details") as string;
+
+    const message = `*Sri Balaji Gold - New Inquiry*
+---------------------------------------
+*Name:* ${name}
+*Phone:* ${phone}
+*Interested Product:* ${product}
+*Requirement:* ${requirement}
+*Details:* ${details}
+---------------------------------------`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/919620527147?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const handleComingSoonSubmit = (e: React.FormEvent) => {
@@ -117,6 +389,32 @@ export default function Home() {
         duration: 0.8, 
         ease: [0.25, 0.46, 0.45, 0.94]
       } 
+    }
+  };
+
+  const modalContainerVariants = {
+    hidden: {
+      opacity: deviceType === "mobile" ? 1 : 0,
+      scale: deviceType === "desktop" ? 0.9 : 1,
+      y: deviceType === "mobile" ? "100%" : (deviceType === "tablet" ? 400 : 0)
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: deviceType === "desktop" ? ([0.34, 1.56, 0.64, 1] as [number, number, number, number]) : ("easeOut" as const)
+      }
+    },
+    exit: {
+      opacity: deviceType === "mobile" ? 1 : 0,
+      scale: deviceType === "desktop" ? 0.9 : 1,
+      y: deviceType === "mobile" ? "100%" : (deviceType === "tablet" ? 400 : 0),
+      transition: {
+        duration: 0.3,
+        ease: "easeIn" as const
+      }
     }
   };
 
@@ -143,14 +441,33 @@ export default function Home() {
     }
   };
 
-  const cardHoverEffect: Variants = {
-    hover: { 
-      y: -8, 
-      scale: 1.02, 
-      transition: { 
-        duration: 0.3, 
-        ease: "easeOut" 
-      } 
+  const statsCardVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" } 
+    },
+    hover: {
+      y: -6,
+      borderColor: "rgba(200, 116, 69, 0.4)",
+      boxShadow: "0 15px 30px -10px rgba(200, 116, 69, 0.15)",
+      transition: { duration: 0.3, ease: "easeOut" }
+    }
+  };
+
+  const featureCardVariants: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.6, ease: "easeOut" } 
+    },
+    hover: {
+      y: -8,
+      scale: 1.02,
+      boxShadow: "0 20px 25px -5px rgba(200, 116, 69, 0.25), 0 10px 10px -5px rgba(200, 116, 69, 0.2)",
+      transition: { duration: 0.3, ease: "easeOut" }
     }
   };
 
@@ -215,9 +532,9 @@ export default function Home() {
           <div className="hidden md:block">
             <a
               href="#products"
-              className="bg-[#1E5631] hover:bg-[#163D24] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#C87445] hover:bg-[#A9582D] text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg hover:shadow-xl transition-all duration-300"
               style={{
-                backgroundColor: '#1E5631',
+                backgroundColor: '#C87445',
                 color: '#ffffff'
               }}
             >
@@ -309,7 +626,7 @@ export default function Home() {
               <a
                 href="#products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-[#1E5631] text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
+                className="bg-[#C87445] text-white font-bold py-3 rounded-xl text-center text-sm shadow-md mt-2"
               >
                 Shop Now
               </a>
@@ -353,8 +670,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl sm:text-6xl md:text-[72px] font-bold text-brand-brown-dark leading-[0.95] tracking-tight"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+              className="font-serif text-4xl sm:text-6xl md:text-[72px] font-bold text-brand-brown-dark leading-[0.95] tracking-tight"
             >
               The Taste <br />
               Every Family
@@ -397,9 +713,9 @@ export default function Home() {
                 href="#products"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-[#1E5631] hover:bg-[#163D24] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 text-center w-full sm:w-auto"
+                className="bg-[#C87445] hover:bg-[#A9582D] text-white rounded-xl px-8 py-3.5 md:py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 text-center w-full sm:w-auto"
                 style={{
-                  backgroundColor: '#1E5631',
+                  backgroundColor: '#C87445',
                   color: '#ffffff'
                 }}
               >
@@ -429,43 +745,58 @@ export default function Home() {
       </section>
 
       {/* 2.5. Stats Strip Section (Positioned below Hero, outside image overlay) */}
-      <motion.section 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeInUp}
-        className="w-full bg-background py-12 md:py-16 border-b border-brand-green/10 relative z-30"
-      >
-        <div className="max-w-[1240px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      <section className="w-full bg-background py-12 md:py-16 border-b border-brand-green/10 relative z-30">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="max-w-[1240px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+        >
           {/* Column 1: 40+ Years */}
-          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+          <motion.div 
+            variants={statsCardVariants}
+            whileHover={deviceType === "desktop" ? "hover" : undefined}
+            whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+            className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] transition-all duration-300"
+          >
             <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
               <Award className="w-6 h-6 text-brand-gold" />
             </div>
             <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">40+ Years of</div>
             <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Trusted Quality</div>
-          </div>
+          </motion.div>
 
           {/* Column 2: 1000+ Retailers */}
-          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+          <motion.div 
+            variants={statsCardVariants}
+            whileHover={deviceType === "desktop" ? "hover" : undefined}
+            whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+            className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] transition-all duration-300"
+          >
             <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
               <Store className="w-6 h-6 text-brand-gold" />
             </div>
             <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">1000+ Retailers</div>
             <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Across Karnataka</div>
-          </div>
+          </motion.div>
 
           {/* Column 3: Millions */}
-          <div className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] hover:shadow-[0_8px_30px_rgba(230,126,34,0.12)] transition-all duration-300">
+          <motion.div 
+            variants={statsCardVariants}
+            whileHover={deviceType === "desktop" ? "hover" : undefined}
+            whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+            className="bg-white/65 backdrop-blur-sm border border-brand-gold/15 rounded-2xl p-6 flex flex-col items-center shadow-[0_4px_20px_-4px_rgba(230,126,34,0.08)] transition-all duration-300"
+          >
             <div className="w-12 h-12 bg-brand-gold-light rounded-full flex items-center justify-center border border-brand-gold/25 shadow-inner mb-3.5">
               <Utensils className="w-6 h-6 text-brand-gold" />
             </div>
             <div className="text-brand-brown-dark font-[800] text-lg md:text-xl leading-snug">Millions of Breakfasts</div>
             <div className="text-brand-gold text-[10px] font-black uppercase tracking-widest mt-1">Served with Love</div>
-          </div>
+          </motion.div>
 
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* 3. Features Cards Section (Positioned below Stats Strip) */}
       <section className="w-full bg-background py-8 md:py-12 relative z-30">
@@ -480,45 +811,48 @@ export default function Home() {
             
             {/* Directly Sourced */}
             <motion.div 
-              variants={fadeInUp}
-              whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
             >
               <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
                 <Wheat className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Directly Sourced From Farmers</h3>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Directly Sourced From Farmers</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Premium grains sourced from trusted farming communities.</p>
               </div>
             </motion.div>
             
             {/* Sortex Processed */}
             <motion.div 
-              variants={fadeInUp}
-              whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
             >
               <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
                 <Factory className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Sortex Processed</h3>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Sortex Processed</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Advanced technology ensures purity and consistency.</p>
               </div>
             </motion.div>
 
             {/* Trusted By Mothers */}
             <motion.div 
-              variants={fadeInUp}
-              whileHover="hover"
-              className="flex items-start gap-4 bg-gradient-to-br from-[#165030] to-[#0A2616] border border-brand-gold/30 rounded-[20px] p-6 text-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+              variants={featureCardVariants}
+              whileHover={deviceType === "desktop" ? "hover" : undefined}
+              whileTap={deviceType !== "desktop" ? { scale: 0.98 } : undefined}
+              className="flex items-start gap-4 bg-gradient-to-br from-[#C87445] to-[#6E3314] border border-brand-gold/30 rounded-[20px] p-6 text-white transition-all duration-300 cursor-pointer"
             >
               <div className="bg-white/10 p-3 rounded-xl border border-brand-gold/20 flex-shrink-0">
                 <Heart className="w-6 h-6 text-brand-gold" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-[16px] md:text-[18px] leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Trusted By Mothers</h3>
+                <h3 className="text-white font-serif font-bold text-[16px] md:text-[18px] leading-tight">Trusted By Mothers</h3>
                 <p className="text-[#EFE8DC]/85 text-xs leading-relaxed mt-2 font-medium">Serving generations with nutritious breakfast essentials.</p>
               </div>
             </motion.div>
@@ -557,14 +891,14 @@ export default function Home() {
         </div>
 
         {/* Large container card matching target layout */}
-        <div className="bg-[#EBF2ED] border border-[#D2E3D6] rounded-3xl md:rounded-[32px] p-5 sm:p-8 md:p-14 shadow-lg">
+        <div className="bg-[#F8EFEA] border border-[#EAD7CD] rounded-3xl md:rounded-[32px] p-5 sm:p-8 md:p-14 shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10 items-stretch">
             
             {/* Left Column: Text content */}
             <div className="lg:col-span-6 flex flex-col justify-between items-start">
               <div>
                 <div className="flex items-center gap-4 mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold text-brand-brown-dark leading-tight" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+                  <h2 className="font-serif text-3xl md:text-4xl font-bold text-brand-brown-dark leading-tight">
                     The Taste of Tradition <br />
                     Since 1980
                   </h2>
@@ -631,11 +965,17 @@ export default function Home() {
       <section id="products" className="py-24 bg-white border-y border-brand-green/5">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
           
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: deviceType === "desktop" ? 30 : (deviceType === "mobile" ? 10 : 0) }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="text-center max-w-2xl mx-auto mb-16"
+          >
             <span className="text-xs font-black text-brand-gold tracking-widest uppercase mb-3 block">
               OUR CATALOGUE
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-brand-brown-dark leading-tight mb-4" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-brand-brown-dark leading-tight mb-4">
               Explore the Sri Balaji Gold Range
             </h2>
             <p className="text-brand-brown-dark text-base">
@@ -643,132 +983,80 @@ export default function Home() {
             </p>
 
             {/* Filter Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-300 ${
-                    selectedCategory === cat
-                      ? "bg-[#6B4423] text-white shadow-lg"
-                      : "bg-white text-brand-brown-dark hover:bg-gray-50 border border-gray-200"
-                  }`}
-                >
-                  {cat}
-                </button>
+            {deviceType === "desktop" ? (
+              <div className="flex items-center justify-center gap-8 mt-8 border-b border-[#F1E7D8] pb-2 max-w-max mx-auto">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`relative px-4 py-2 text-xs font-black uppercase tracking-wider transition-colors duration-300 focus:outline-none ${
+                      selectedCategory === cat ? "text-[#C87445]" : "text-brand-brown-dark hover:text-[#C87445]"
+                    }`}
+                  >
+                    {cat}
+                    {selectedCategory === cat && (
+                      <motion.span
+                        layoutId="activeCategoryUnderline"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C87445]"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-5 py-2.5 rounded-full text-xs font-extrabold transition-all duration-150 ${
+                      selectedCategory === cat
+                        ? "bg-[#6B4423] text-white shadow-lg"
+                        : "bg-white text-brand-brown-dark hover:bg-gray-50 border border-gray-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Product Grid / Mobile Horizontal Carousel */}
+          {deviceType === "mobile" ? (
+            <div
+              ref={productContainerRef}
+              className="flex overflow-x-auto pb-6 gap-4 overscroll-x-contain scrollbar-none"
+            >
+              {[...filteredProducts, ...filteredProducts].map((product, index) => (
+                <ProductCard
+                  key={`${product.id}-mobile-card-${index}`}
+                  product={product}
+                  deviceType={deviceType}
+                  router={router}
+                  index={index}
+                />
               ))}
             </div>
-          </div>
-
-          {/* Product Grid */}
-          <motion.div
-            layout
-            className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product) => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  key={product.id}
-                  whileHover={product.isAvailable ? "hover" : undefined}
-                  variants={cardHoverEffect}
-                  className={`overflow-hidden rounded-3xl border-2 flex flex-col h-full transition-all duration-300 group ${
-                    product.isAvailable 
-                      ? "cursor-pointer border-brand-green-light/20 hover:border-brand-green-light hover:shadow-2xl" 
-                      : "cursor-not-allowed border-gray-200"
-                  }`}
-                  onClick={(e) => {
-                    // Only allow navigation for available products
-                    if (!product.isAvailable) return;
-                    // Prevent navigation when clicking on inquiry buttons
-                    if ((e.target as HTMLElement).closest("button")) return;
-                    router.push(`/products/${getProductSlug(product.name)}`);
-                  }}
-                >
-                  {/* Image Container with Enhanced Design - WHITE TOP */}
-                  <div className="relative aspect-square w-full bg-white overflow-hidden flex items-center justify-center p-6 md:p-8">
-                    <div className="relative w-[85%] h-[85%]">
-                      {product.isAvailable ? (
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-contain transition-all duration-500 group-hover:scale-110"
-                          style={product.id === "premium-idly-rava" ? { mixBlendMode: "multiply" } : {}}
-                        />
-                      ) : (
-                        // Placeholder for upcoming products - no actual packaging revealed
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-center space-y-4">
-                            <div className="w-28 h-28 md:w-36 md:h-36 mx-auto bg-gradient-to-br from-brand-green/10 to-brand-orange/10 rounded-3xl border-4 border-dashed border-brand-green/30 flex items-center justify-center backdrop-blur-sm">
-                              <div className="text-5xl md:text-6xl">📦</div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {/* Launching Soon Overlay for unavailable products */}
-                    {!product.isAvailable && (
-                      <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[6px]">
-                        <div className="bg-gradient-to-r from-brand-orange to-brand-green text-white px-5 py-2.5 rounded-full text-sm md:text-base font-bold uppercase tracking-wide shadow-2xl border-2 border-white" style={{textShadow: '2px 2px 8px rgba(0,0,0,0.8)'}}>
-                          Launching Next
-                        </div>
-                      </div>
-                    )}
-                    {/* Category badge */}
-                    <span className="absolute top-3 md:top-4 left-3 md:left-4 bg-white/95 backdrop-blur-sm border border-brand-green/20 text-brand-brown-dark text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
-                      {product.category}
-                    </span>
-                    {/* Availability badge - Only show for available products */}
-                    {product.isAvailable && (
-                      <span className="absolute top-3 md:top-4 right-3 md:right-4 bg-emerald-500 text-white text-[8px] md:text-[9px] font-bold uppercase tracking-wide px-2.5 py-1 md:px-3 md:py-1.5 rounded-full shadow-md">
-                        ✓ Available
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Description Box with Enhanced Styling - BROWN BOTTOM */}
-                  <div className="p-4 md:p-6 flex flex-col flex-grow bg-[#F5F0E8]">
-                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-brand-brown-dark mb-2 group-hover:text-brand-brown transition-colors line-clamp-1">
-                      {product.name}
-                    </h3>
-                    <p className="text-brand-brown-dark/70 text-xs md:text-sm leading-relaxed mb-3 flex-grow line-clamp-2 md:line-clamp-3">
-                      {product.description}
-                    </p>
-
-                    {/* Features checklist - hidden on mobile, visible on tablet/desktop */}
-                    <div className="hidden sm:flex flex-col gap-2 mb-4">
-                      {product.features.slice(0, 2).map((feat, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-brand-gold flex-shrink-0" />
-                          <span className="text-xs font-medium text-brand-brown-dark/80">{feat}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer Info */}
-                    <div className="flex items-center justify-between border-t border-brand-green/10 pt-4 mt-auto">
-                      {product.isAvailable ? (
-                        <div className="w-full">
-                          <span className="text-[9px] md:text-[11px] text-brand-brown-dark uppercase font-semibold block">Available Sizes</span>
-                          <span className="text-xs md:text-sm font-bold text-brand-brown-dark block mt-1">{product.packSizes.join(" • ")}</span>
-                        </div>
-                      ) : (
-                        <div className="w-full">
-                          <span className="text-[9px] md:text-[11px] text-brand-gold uppercase font-bold tracking-wider block truncate">Launching Soon</span>
-                          <span className="text-xs md:text-sm font-bold text-brand-brown-dark/70 block truncate">{product.packSizes.slice(0, 2).join(" / ")}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          ) : (
+            <motion.div
+              layout
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredProducts.map((product, index) => (
+                  <ProductCard
+                    key={`${product.id}-desktop-card-${index}`}
+                    product={product}
+                    deviceType={deviceType}
+                    router={router}
+                    index={index}
+                  />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
 
         </div>
       </section>
@@ -782,7 +1070,7 @@ export default function Home() {
         variants={fadeInUp}
         className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-24"
       >
-        <div className="bg-[#1E5631] text-background rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
+        <div className="bg-[#C87445] text-background rounded-3xl md:rounded-[40px] p-6 sm:p-10 md:p-16 relative overflow-hidden shadow-2xl">
           {/* Subtle golden design bg elements */}
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-brand-gold opacity-[0.07] blur-3xl pointer-events-none" />
           <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-brand-gold-light opacity-[0.05] blur-3xl pointer-events-none" />
@@ -794,7 +1082,7 @@ export default function Home() {
                 <span className="text-xs font-black text-white tracking-widest uppercase mb-3 block">
                   OUR GOLD STANDARD
                 </span>
-                <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+                <h2 className="font-serif text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
                   Quality Assurance In Every Grain
                 </h2>
                 <p className="text-white text-base md:text-lg mb-8 leading-relaxed font-medium">
@@ -815,9 +1103,23 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>01</div>
-                  <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
-                  <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">01</div>
+                  <motion.div 
+                    initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
+                    whileInView={{ width: "100%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeInOut", delay: 0.1 }}
+                    className="h-[1px] bg-brand-gold/30 my-2"
+                  />
+                  <motion.div
+                    initial={deviceType === "desktop" ? { opacity: 0, x: -15 } : (deviceType === "tablet" ? { opacity: 0 } : {})}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={deviceType === "desktop" ? { duration: 0.6, ease: "easeOut", delay: 0.3 } : (deviceType === "tablet" ? { duration: 0.6 } : {})}
+                  >
+                    <div className="font-serif font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
+                    <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                  </motion.div>
                 </button>
                 
                 <button 
@@ -828,11 +1130,25 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>02</div>
-                  <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
-                  <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">02</div>
+                  <motion.div 
+                    initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
+                    whileInView={{ width: "100%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
+                    className="h-[1px] bg-brand-gold/30 my-2"
+                  />
+                  <motion.div
+                    initial={deviceType === "desktop" ? { opacity: 0, x: -15 } : (deviceType === "tablet" ? { opacity: 0 } : {})}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={deviceType === "desktop" ? { duration: 0.6, ease: "easeOut", delay: 0.4 } : (deviceType === "tablet" ? { duration: 0.6 } : {})}
+                  >
+                    <div className="font-serif font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
+                    <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                  </motion.div>
                 </button>
-
+                
                 <button 
                   onClick={() => setCurrentQualityIndex(2)}
                   className={`flex flex-col text-left p-4 rounded-2xl border transition-all duration-300 ${
@@ -841,9 +1157,23 @@ export default function Home() {
                       : "border-transparent bg-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <div className="text-2xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>03</div>
-                  <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
-                  <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                  <div className="font-serif text-2xl font-bold text-brand-gold mb-1">03</div>
+                  <motion.div 
+                    initial={deviceType === "desktop" ? { width: 0 } : { width: "100%" }}
+                    whileInView={{ width: "100%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
+                    className="h-[1px] bg-brand-gold/30 my-2"
+                  />
+                  <motion.div
+                    initial={deviceType === "desktop" ? { opacity: 0, x: -15 } : (deviceType === "tablet" ? { opacity: 0 } : {})}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={deviceType === "desktop" ? { duration: 0.6, ease: "easeOut", delay: 0.5 } : (deviceType === "tablet" ? { duration: 0.6 } : {})}
+                  >
+                    <div className="font-serif font-bold text-white mb-1 text-sm">Moisture Control</div>
+                    <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                  </motion.div>
                 </button>
               </motion.div>
 
@@ -853,60 +1183,117 @@ export default function Home() {
                 className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:hidden mt-8"
               >
                 {/* Card 01 */}
-                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg"
+                >
+                  <motion.div 
+                    initial={deviceType === "tablet" ? { clipPath: "inset(0 0 100% 0)" } : undefined}
+                    whileInView={deviceType === "tablet" ? { clipPath: "inset(0 0 0 0)" } : undefined}
+                    transition={deviceType === "tablet" ? { duration: 0.8, ease: "easeOut" } : undefined}
+                    className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10"
+                  >
                     <Image
                       src="/quality assurance/triple dust aspiration.png"
                       alt="Triple Dust Aspiration"
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                   <div>
-                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>01</div>
-                    <div className="font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
-                    <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">01</div>
+                    <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
+                    <motion.div
+                      initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
+                      whileInView={deviceType === "tablet" ? { opacity: 1 } : undefined}
+                      transition={deviceType === "tablet" ? { duration: 0.6 } : undefined}
+                    >
+                      <div className="font-serif font-bold text-white mb-1 text-sm">Triple Dust Aspiration</div>
+                      <p className="text-white text-[11px] leading-relaxed">Grains pass through localized high-pressure aspiration tubes to completely clear dust.</p>
+                    </motion.div>
                   </div>
                 </motion.div>
 
                 {/* Card 02 */}
-                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg"
+                >
+                  <motion.div 
+                    initial={deviceType === "tablet" ? { clipPath: "inset(0 0 100% 0)" } : undefined}
+                    whileInView={deviceType === "tablet" ? { clipPath: "inset(0 0 0 0)" } : undefined}
+                    transition={deviceType === "tablet" ? { duration: 0.8, ease: "easeOut" } : undefined}
+                    className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10"
+                  >
                     <Image
                       src="/quality assurance/sortex.png"
                       alt="Color Sortex Sort"
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                   <div>
-                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>02</div>
-                    <div className="font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
-                    <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">02</div>
+                    <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
+                    <motion.div
+                      initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
+                      whileInView={deviceType === "tablet" ? { opacity: 1 } : undefined}
+                      transition={deviceType === "tablet" ? { duration: 0.6 } : undefined}
+                    >
+                      <div className="font-serif font-bold text-white mb-1 text-sm">Color Sortex Sort</div>
+                      <p className="text-white text-[11px] leading-relaxed">Advanced infrared optical sensors analyze every grain, separating off-color seeds.</p>
+                    </motion.div>
                   </div>
                 </motion.div>
 
                 {/* Card 03 */}
-                <motion.div variants={fadeInUp} className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg">
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-col bg-white/5 rounded-2xl p-4 border border-white/10 shadow-lg"
+                >
+                  <motion.div 
+                    initial={deviceType === "tablet" ? { clipPath: "inset(0 0 100% 0)" } : undefined}
+                    whileInView={deviceType === "tablet" ? { clipPath: "inset(0 0 0 0)" } : undefined}
+                    transition={deviceType === "tablet" ? { duration: 0.8, ease: "easeOut" } : undefined}
+                    className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 mb-4 shadow-md bg-black/10"
+                  >
                     <Image
                       src="/quality assurance/moisturiser.png"
                       alt="Moisture Control"
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                   <div>
-                    <div className="text-xl font-bold text-brand-gold mb-1" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>03</div>
-                    <div className="font-bold text-white mb-1 text-sm">Moisture Control</div>
-                    <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                    <div className="font-serif text-xl font-bold text-brand-gold mb-1">03</div>
+                    <div className="h-[1px] bg-brand-gold/30 my-2 w-full" />
+                    <motion.div
+                      initial={deviceType === "tablet" ? { opacity: 0 } : undefined}
+                      whileInView={deviceType === "tablet" ? { opacity: 1 } : undefined}
+                      transition={deviceType === "tablet" ? { duration: 0.6 } : undefined}
+                    >
+                      <div className="font-serif font-bold text-white mb-1 text-sm">Moisture Control</div>
+                      <p className="text-white text-[11px] leading-relaxed">Precisely audited moisture limits preserve natural oils, ensuring long shelf life.</p>
+                    </motion.div>
                   </div>
                 </motion.div>
               </motion.div>
             </div>
 
             {/* Right Column: Slideshow (Desktop only) */}
-            <div className="hidden lg:block w-[38%] relative aspect-square max-w-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
+            <div 
+              ref={qualitySectionRef}
+              className="hidden lg:block w-[38%] relative aspect-square max-w-[420px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/20"
+            >
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentQualityIndex}
@@ -914,7 +1301,8 @@ export default function Home() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute inset-0 w-full h-[120%] -top-[10%]"
+                  style={{ y: deviceType === "desktop" ? imageY : 0 }}
                 >
                   <Image
                     src={QUALITY_IMAGES[currentQualityIndex]}
@@ -967,7 +1355,7 @@ export default function Home() {
             <span className="text-xs font-black text-brand-gold tracking-widest uppercase mb-3 block">
               PARTNERSHIP & INQUIRIES
             </span>
-            <h2 className="text-4xl font-bold text-brand-brown-dark leading-tight mb-6" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+            <h2 className="font-serif text-4xl font-bold text-brand-brown-dark leading-tight mb-6">
               Become a Retailer or Get Bulk Supplies
             </h2>
             <p className="text-brand-brown-dark mb-8 leading-relaxed">
@@ -1010,15 +1398,16 @@ export default function Home() {
           {/* Right Column: Inquiry Form Card */}
           <div className="lg:col-span-7">
             <div className="bg-white border border-brand-gold/15 rounded-3xl p-5 sm:p-8 md:p-10 shadow-xl">
-              <h3 className="text-2xl font-bold text-brand-brown-dark mb-2" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>Send an Inquiry</h3>
+              <h3 className="font-serif text-2xl font-bold text-brand-brown-dark mb-2">Send an Inquiry</h3>
               <p className="text-brand-brown-dark text-xs mb-6">Our sales representative will connect with you within 24 business hours.</p>
 
-              <form onSubmit={(e) => { e.preventDefault(); alert("Thank you for your interest! Our team will get back to you shortly."); }} className="flex flex-col gap-5">
+              <form onSubmit={handleMainInquirySubmit} className="flex flex-col gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col">
                     <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Your Name</label>
                     <input
                       type="text"
+                      name="name"
                       required
                       placeholder="Enter name"
                       className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
@@ -1028,6 +1417,7 @@ export default function Home() {
                     <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Phone Number</label>
                     <input
                       type="tel"
+                      name="phone"
                       required
                       placeholder="Enter mobile number"
                       className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
@@ -1039,6 +1429,7 @@ export default function Home() {
                   <div className="flex flex-col">
                     <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Interested Product</label>
                     <select
+                      name="product"
                       className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold appearance-none"
                     >
                       <option>All Products Catalogue</option>
@@ -1051,6 +1442,7 @@ export default function Home() {
                     <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Approx. Monthly Requirement</label>
                     <input
                       type="text"
+                      name="requirement"
                       placeholder="e.g. 500 kg"
                       className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold"
                     />
@@ -1061,6 +1453,7 @@ export default function Home() {
                   <label className="text-[10px] font-black uppercase text-brand-brown-dark mb-1.5">Message / Delivery Address Details</label>
                   <textarea
                     rows={4}
+                    name="details"
                     placeholder="Enter details..."
                     className="border border-brand-gold/30 rounded-xl px-4 py-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold text-brand-brown-dark font-semibold resize-none"
                   />
@@ -1068,9 +1461,9 @@ export default function Home() {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#1E5631] hover:bg-[#163D24] text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+                  className="w-full bg-[#C87445] hover:bg-[#A9582D] text-white rounded-xl py-4 font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mt-4"
                   style={{
-                    backgroundColor: '#1E5631',
+                    backgroundColor: '#C87445',
                     color: '#ffffff'
                   }}
                 >
@@ -1085,7 +1478,7 @@ export default function Home() {
       </motion.section>
 
       {/* 8. Footer */}
-      <footer className="w-full bg-gradient-to-r from-[#163D24] via-[#1E5631] to-[#256A3F] text-white border-t border-white/5">
+      <footer className="w-full bg-gradient-to-r from-[#A9582D] via-[#C87445] to-[#DE8857] text-white border-t border-white/5">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Main Footer Row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 mb-6">
@@ -1094,7 +1487,7 @@ export default function Home() {
               <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white p-0.5">
                 <Image src="/logo.png" alt="Sri Balaji Gold Logo" fill className="object-contain" />
               </div>
-              <span className="font-black text-base tracking-[0.28em] text-white whitespace-nowrap" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>SRI BALAJI GOLD</span>
+              <span className="font-serif font-black text-base tracking-[0.28em] text-white whitespace-nowrap">SRI BALAJI GOLD</span>
             </div>
 
             {/* Center: Copyright Text */}
@@ -1248,7 +1641,7 @@ export default function Home() {
                       <div className="flex flex-col">
                         <label className="text-[10px] font-black uppercase text-brand-brown mb-1">Availability</label>
                         {inquiryProduct.isAvailable ? (
-                          <div className="border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
+                          <div className="border border-[#EAD7CD] bg-[#F8EFEA] text-[#C87445] rounded-lg px-3.5 py-2.5 text-[10px] font-extrabold text-center flex items-center justify-center gap-1">
                             <Sparkles className="w-3 h-3 animate-pulse" /> In Stock
                           </div>
                         ) : (
@@ -1382,14 +1775,33 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex ${
+              deviceType === "mobile" ? "items-end p-0" : "items-center justify-center p-4"
+            }`}
           >
             <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              className="bg-white border border-brand-gold/25 rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative"
+              variants={modalContainerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              drag={deviceType === "mobile" ? "y" : false}
+              dragConstraints={{ top: 0, bottom: 300 }}
+              dragElastic={0.15}
+              onDragEnd={(event, info) => {
+                if (deviceType === "mobile" && info.offset.y > 150) {
+                  setIsComingSoonOpen(false);
+                }
+              }}
+              className={`bg-white border border-brand-gold/25 relative ${
+                deviceType === "mobile"
+                  ? "w-full h-[80vh] rounded-t-[32px] rounded-b-none p-6 pb-12 overflow-y-auto"
+                  : "rounded-[32px] max-w-3xl w-full p-6 sm:p-8 shadow-2xl"
+              }`}
             >
+              {deviceType === "mobile" && (
+                <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+              )}
+
               <button
                 onClick={() => setIsComingSoonOpen(false)}
                 className="absolute top-6 right-6 text-brand-brown hover:text-brand-brown-dark p-1 bg-background rounded-full z-10"
@@ -1423,18 +1835,36 @@ export default function Home() {
                           transition={{ duration: 0.3 }}
                           className="absolute inset-0 flex items-center justify-center"
                         >
-                          <div className="relative w-full h-full bg-gradient-to-br from-brand-gold-light/30 to-background flex items-center justify-center">
+                          <div className="relative w-full h-full bg-gradient-to-br from-brand-gold-light/30 to-background flex flex-col items-center justify-center p-4">
                             {COMING_SOON_PRODUCTS[activeModalProductIndex] && (
                               <>
-                                {/* Coming Soon Overlay Text - No Image */}
+                                <motion.div
+                                  key={`modal-img-${activeModalProductIndex}`}
+                                  initial={{ y: -50, opacity: 0 }}
+                                  animate={{ y: 0, opacity: 1 }}
+                                  transition={{
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 15,
+                                    delay: 0.55
+                                  }}
+                                  className="relative w-36 h-36 mb-2"
+                                >
+                                  <Image
+                                    src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
+                                    alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
+                                    fill
+                                    className="object-contain blur-2xl opacity-60 pointer-events-none select-none"
+                                  />
+                                </motion.div>
                                 <div className="text-center">
-                                  <h3 className="text-3xl sm:text-4xl font-black text-brand-gold mb-2" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+                                  <h3 className="font-serif text-xl font-black text-brand-gold mb-1">
                                     COMING SOON
                                   </h3>
                                   <div className="flex items-center justify-center gap-2">
-                                    <div className="w-8 h-[2px] bg-brand-gold/60"></div>
-                                    <Sparkles className="w-5 h-5 text-brand-gold animate-pulse" />
-                                    <div className="w-8 h-[2px] bg-brand-gold/60"></div>
+                                    <div className="w-6 h-[1px] bg-brand-gold/60"></div>
+                                    <Sparkles className="w-4 h-4 text-brand-gold animate-pulse" />
+                                    <div className="w-6 h-[1px] bg-brand-gold/60"></div>
                                   </div>
                                 </div>
                               </>
@@ -1496,7 +1926,7 @@ export default function Home() {
                     <h3 className="font-playfair text-2xl sm:text-3xl font-[800] text-brand-brown-dark leading-tight mb-3">
                       Coming Soon to Your Kitchen
                     </h3>
-                    <p className="text-brand-brown-dark text-xs leading-relaxed mb-6">
+                    <p className="text-brand-brown text-xs leading-relaxed mb-6">
                       We are expanding our range with premium stone-ground flours, double-roasted ravas, and clean, nutritious millets. Register below to receive launch alerts and exclusive early-bird samples!
                     </p>
 
