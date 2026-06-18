@@ -1269,6 +1269,25 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      {/* Floating Developer Credit Button */}
+      <motion.a
+        href="https://unifirolabs.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-40 bg-[#1a1a1a] hover:bg-black text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 group border border-white/10"
+        style={{ backdropFilter: 'blur(10px)' }}
+      >
+        <span className="text-xs font-medium flex items-center gap-1.5">
+          <span className="text-[10px] opacity-70">⚡</span>
+          <span>Developed by</span>
+          <span className="font-bold text-white group-hover:text-brand-gold transition-colors">UnifiroLabs</span>
+        </span>
+        <X className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" style={{ transform: 'rotate(45deg)' }} />
+      </motion.a>
+
       {/* 10. Recipes / Coming Soon Modal */}
       <AnimatePresence>
         {isComingSoonOpen && (

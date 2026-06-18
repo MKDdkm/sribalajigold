@@ -339,11 +339,12 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-brand-gold" />
               </div>
               
-              <h2 className="text-6xl sm:text-7xl text-brand-brown-dark tracking-wider relative inline-block mb-3" style={{fontFamily: "'Great Vibes', cursive"}}>
-                Recipe Gallery
+              <h2 className="text-6xl sm:text-7xl tracking-wider relative inline-block mb-3" style={{fontFamily: "'Great Vibes', cursive"}}>
+                <span className="bg-gradient-to-r from-brand-gold via-brand-orange to-brand-gold bg-clip-text text-transparent">Recipe Gallery</span>
               </h2>
-              <p className="text-brand-gold text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
-                Delicious dishes made using Sri Balaji {product.name}
+              <p className="text-xs font-black uppercase tracking-widest mt-2 max-w-lg leading-relaxed">
+                <span className="text-brand-brown-dark">Delicious dishes made using</span>{' '}
+                <span className="bg-gradient-to-r from-brand-gold to-brand-orange bg-clip-text text-transparent">Sri Balaji {product.name}</span>
               </p>
               <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent mt-6 rounded-full" />
             </div>
