@@ -1352,14 +1352,21 @@ export default function Home() {
                           transition={{ duration: 0.3 }}
                           className="absolute inset-0 flex items-center justify-center"
                         >
-                          <div className="relative w-full h-full">
+                          <div className="relative w-full h-full bg-gradient-to-br from-brand-gold-light/30 to-background flex items-center justify-center">
                             {COMING_SOON_PRODUCTS[activeModalProductIndex] && (
-                              <Image
-                                src={COMING_SOON_PRODUCTS[activeModalProductIndex].image}
-                                alt={COMING_SOON_PRODUCTS[activeModalProductIndex].name}
-                                fill
-                                className="object-contain blur-md"
-                              />
+                              <>
+                                {/* Coming Soon Overlay Text - No Image */}
+                                <div className="text-center">
+                                  <h3 className="text-3xl sm:text-4xl font-black text-brand-gold mb-2" style={{fontFamily: "'Playfair Display', Georgia, serif"}}>
+                                    COMING SOON
+                                  </h3>
+                                  <div className="flex items-center justify-center gap-2">
+                                    <div className="w-8 h-[2px] bg-brand-gold/60"></div>
+                                    <Sparkles className="w-5 h-5 text-brand-gold animate-pulse" />
+                                    <div className="w-8 h-[2px] bg-brand-gold/60"></div>
+                                  </div>
+                                </div>
+                              </>
                             )}
                           </div>
                         </motion.div>
