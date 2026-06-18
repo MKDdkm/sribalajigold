@@ -301,9 +301,9 @@ export default function Home() {
           
           {/* Background Images - Different for Mobile and Desktop */}
           <div className="absolute inset-0 w-full h-full z-0 select-none">
-            {/* Mobile Banner - using desktop image */}
+            {/* Mobile Banner - newspaper ad */}
             <Image
-              src="/hero-banner.png"
+              src="/hero-banner-mobile.jpeg"
               alt="Sri Balaji Gold Mobile Banner"
               fill
               priority
