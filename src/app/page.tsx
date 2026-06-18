@@ -247,28 +247,48 @@ export default function Home() {
             >
               <a
                 href="#hero"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
                 className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Home
               </a>
               <a
                 href="#products"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
                 className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Products
               </a>
               <a
                 href="#about"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
                 className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Our Story
               </a>
               <a
                 href="#quality"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    document.getElementById('quality')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
                 className="font-semibold text-brand-brown-dark hover:text-brand-gold py-1"
               >
                 Quality
@@ -1314,17 +1334,17 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 md:p-12"
           >
             <motion.a
               href="https://www.instagram.com/sribalajigoldproducts"
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative max-w-3xl w-full cursor-pointer"
+              className="relative max-w-md md:max-w-lg w-full cursor-pointer"
               onClick={() => setIsPosterOpen(false)}
             >
               {/* Close Button */}
@@ -1334,14 +1354,14 @@ export default function Home() {
                   e.stopPropagation();
                   setIsPosterOpen(false);
                 }}
-                className="absolute -top-4 -right-4 z-10 bg-white hover:bg-gray-100 text-brand-brown-dark p-2 rounded-full shadow-2xl transition-all"
+                className="absolute -top-3 -right-3 z-10 bg-white hover:bg-gray-100 text-brand-brown-dark p-2.5 rounded-full shadow-2xl transition-all hover:scale-110"
                 aria-label="Close"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
 
               {/* Poster Image */}
-              <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden shadow-2xl ring-2 ring-white/20">
                 <Image
                   src="/poster.jpeg"
                   alt="Old Trust New Aura Same Taste - Sri Balaji Gold"
