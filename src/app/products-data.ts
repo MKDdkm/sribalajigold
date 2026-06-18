@@ -24,7 +24,7 @@ export const PRODUCTS: Product[] = [
     image: "/products/idly rawa.png",
     description: "Premium double-roasted idly rava made from the finest grains, perfect for soft, fluffy, and authentic idlis.",
     features: ["100% Sortex Cleaned", "Double Roasted for Aroma", "No Added Preservatives", "Perfect Granulation"],
-    packSizes: ["500g", "1kg"]
+    packSizes: ["500g / 1kg"]
   },
   {
     id: "bombay-suji",
