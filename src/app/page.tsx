@@ -1379,7 +1379,10 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-brown-dark text-sm">Customer Helpline</h4>
-                  <p className="text-brand-brown-dark text-xs mt-1">+91 96205 27147</p>
+                  <p className="text-brand-brown-dark text-xs mt-1">
+                    <a href="tel:+919620527147" className="hover:underline">+91 96205 27147</a> /{" "}
+                    <a href="tel:+919019174747" className="hover:underline">+91 90191 74747</a>
+                  </p>
                 </div>
               </div>
 
@@ -1389,7 +1392,9 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-brown-dark text-sm">Email Support</h4>
-                  <p className="text-brand-brown text-xs mt-1">srivenkatalaxmiagrofoods@gmail.com</p>
+                  <p className="text-brand-brown text-xs mt-1">
+                    <a href="mailto:Chandukolli@svagrofoods.biz" className="hover:underline">Chandukolli@svagrofoods.biz</a>
+                  </p>
                 </div>
               </div>
             </div>
